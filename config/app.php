@@ -171,11 +171,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        iBrand\Wechat\Platform\Providers\AppServiceProvider::class,
+        iBrand\Wechat\Platform\Providers\AuthServiceProvider::class,
+        // iBrand\Wechat\Platform\Providers\BroadcastServiceProvider::class,
+        iBrand\Wechat\Platform\Providers\EventServiceProvider::class,
+        iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
 
     ],
 
