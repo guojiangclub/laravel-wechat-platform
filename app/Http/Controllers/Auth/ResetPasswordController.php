@@ -1,8 +1,8 @@
 <?php
 
-namespace iBrand\Wechat\Platform\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use iBrand\Wechat\Platform\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller

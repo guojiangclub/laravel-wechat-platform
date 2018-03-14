@@ -45,6 +45,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'clients' => [
+            'driver' => 'passport',
+            'provider' => 'clients',
+        ],
     ],
 
     /*
@@ -67,7 +72,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => iBrand\Wechat\Platform\User::class,
+            'model' => App\User::class,
+        ],
+
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' =>iBrand\Wechat\Platform\Models\Clients::class,
         ],
 
         // 'users' => [
@@ -98,5 +108,7 @@ return [
             'expire' => 60,
         ],
     ],
+
+
 
 ];

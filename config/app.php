@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
@@ -167,15 +167,17 @@ return [
         /*
          * Package Service Providers...
          */
+        iBrand\Wechat\Platform\Providers\WechatPlatformServiceProvider::class,
+        iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
-        iBrand\Wechat\Platform\Providers\AppServiceProvider::class,
-        iBrand\Wechat\Platform\Providers\AuthServiceProvider::class,
-        // iBrand\Wechat\Platform\Providers\BroadcastServiceProvider::class,
-        iBrand\Wechat\Platform\Providers\EventServiceProvider::class,
-        iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
 
     ],
 
