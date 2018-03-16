@@ -3,7 +3,6 @@
 
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
 use iBrand\Wechat\Platform\Services\PlatformService;
 use iBrand\Wechat\Platform\Services\MessageService;
 
@@ -39,18 +38,10 @@ class NotifyController extends Controller
 
     /**
      * 公众号消息与事件接收URL.
-     * @param $appid
-     * @param MessageService $message
-     * @param PlatformService $platform
-     * @param Staff $staff
-     * @return bool|string
-     * @internal param PlatformService $component
      */
     public function notifyAccount($appid)
     {
         return  $this->messageService->accountEventProcess($appid);
-
-
     }
 
 

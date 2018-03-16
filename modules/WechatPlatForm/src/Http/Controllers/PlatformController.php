@@ -2,12 +2,8 @@
 
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
 use iBrand\Wechat\Platform\Services\PlatformService;
 use iBrand\Wechat\Platform\Models\Clients;
-use Carbon\Carbon;
-use Laravel\Passport\Passport;
-
 
 
 class PlatformController extends Controller
