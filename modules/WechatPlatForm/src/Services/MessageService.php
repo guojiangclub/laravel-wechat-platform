@@ -5,7 +5,12 @@ namespace iBrand\Wechat\Platform\Services;
 use iBrand\Wechat\Platform\Repositories\AuthorizerRepository;
 use iBrand\Wechat\Platform\Services\PlatformService;
 use EasyWeChat\Kernel\Messages\News;
-
+use EasyWeChat\Kernel\Messages\Image;
+use EasyWeChat\Kernel\Messages\Text;
+use EasyWeChat\Kernel\Messages\Voice;
+use EasyWeChat\Kernel\Messages\Video;
+use EasyWeChat\Kernel\Messages\Card;
+use EasyWeChat\Kernel\Messages\NewsItem;
 
 /**
  * 公众平台推送
@@ -27,10 +32,12 @@ class MessageService
         AuthorizerRepository $authorizerRepository,
 
         PlatformService $platformService
+
     ) {
         $this->authorizerRepository = $authorizerRepository;
 
         $this->platformService=$platformService;
+
     }
 
     /**
@@ -48,17 +55,17 @@ class MessageService
             \Log::info($message);
 
             //event事件
-            if ($message->MsgType == 'event') {
+            if ($message['MsgType'] == 'event') {
 
-                    switch ($message->Event) {
+                    switch ($message['Event']) {
 
                         //关注事件
                         case 'subscribe':
-                            $key = isset($message->EventKey) ? $message->EventKey : '';
-                            $ticket = isset($message->Ticket) ? $message->Ticket : '';
+                            $key = isset($message['EventKey']) ? $message['EventKey'] : '';
+                            $ticket = isset($message['Ticket']) ? $message['Ticket'] : '';
                             $params = [
                                 'app_id'=>$appid,
-                                'openid'=>$message->FromUserName,
+                                'openid'=>$message['FromUserName'],
                                 'event_type'=>'subscribe',
                                 'key'=>$key,
                                 'ticket'=>$ticket,
@@ -69,7 +76,7 @@ class MessageService
                         case 'unsubscribe':
                             $params = [
                                 'app_id'=>$appid,
-                                'openid'=>$message->FromUserName,
+                                'openid'=>$message['FromUserName'],
                                 'event_type'=>'unsubscribe',
                             ];
                             return $this->callBackEvent($url, $params);
@@ -78,21 +85,20 @@ class MessageService
                         case 'user_get_card':
                             $params = [
                                 'app_id'=>$appid,
-                                'open_id'=>$message->FromUserName,
+                                'open_id'=>$message['FromUserName'],
                                 'event_type'=>'user_get_card',
-                                'card_id'=>$message->CardId,
-                                'code'=>$message->UserCardCode,
+                                'card_id'=>$message['CardId'],
+                                'code'=>$message['UserCardCode'],
                             ];
                             return $this->callBackEvent($url, $params);
-
                         //删除会员卡
                         case 'user_del_card':
                             $params = [
                                 'app_id'=>$appid,
-                                'open_id'=>$message->FromUserName,
+                                'open_id'=>$message['FromUserName'],
                                 'event_type'=>'user_del_card',
-                                'card_id'=>$message->CardId,
-                                'code'=>$message->UserCardCode,
+                                'card_id'=>$message['CardId'],
+                                'code'=>$message['UserCardCod'],
                             ];
                             return $this->callBackEvent($url, $params);
 
@@ -100,10 +106,10 @@ class MessageService
                         case 'user_consume_card':
                             $params = [
                                 'app_id'=>$appid,
-                                'open_id'=>$message->FromUserName,
+                                'open_id'=>$message['FromUserName'],
                                 'event_type'=>'user_consume_card',
-                                'card_id'=>$message->CardId,
-                                'code'=>$message->UserCardCode,
+                                'card_id'=>$message['CardId'],
+                                'code'=>$message['UserCardCode'],
                             ];
                             return $this->callBackEvent($url, $params);
 
@@ -111,10 +117,10 @@ class MessageService
                         case 'user_view_card':
                             $params = [
                                 'app_id'=>$appid,
-                                'open_id'=>$message->FromUserName,
+                                'open_id'=>$message['FromUserName'],
                                 'event_type'=>'user_view_card',
-                                'card_id'=>$message->CardId,
-                                'code'=>$message->UserCardCode,
+                                'card_id'=>$message['CardId'],
+                                'code'=>$message['UserCardCode'],
                             ];
                             return $this->callBackEvent($url, $params);
 
@@ -122,10 +128,10 @@ class MessageService
                         case 'SCAN':
                             $params = [
                                 'app_id'=>$appid,
-                                'openid'=>$message->FromUserName,
+                                'openid'=>$message['FromUserName'],
                                 'event_type'=>'SCAN',
-                                'key'=>$message->EventKey,
-                                'ticket'=>$message->Ticket,
+                                'key'=>$message['EventKey'],
+                                'ticket'=>$message['Ticket'],
                             ];
                             return $this->callBackEvent($url, $params);
 
@@ -133,9 +139,9 @@ class MessageService
                         case 'CLICK':
                             $params = [
                                 'app_id'=>$appid,
-                                'open_id'=>$message->FromUserName,
+                                'open_id'=>$message['FromUserName'],
                                 'event_type'=>'CLICK',
-                                'key'=>$message->EventKey,
+                                'key'=>$message['EventKey'],
                             ];
 
                             return $this->callBackEvent($url, $params);
@@ -147,19 +153,20 @@ class MessageService
                 }
 
             //text文本
-            if ($message->MsgType == 'text') {
+            if ($message['MsgType'] == 'text') {
 
                 //全网发布测试：文本消息
-                if ($message->Content == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
+                if ($message['Content'] == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
                     return 'TESTCOMPONENT_MSG_TYPE_TEXT_callback';
                 }
 
                 $params = [
                     'app_id'=>$appid,
-                    'open_id'=>$message->FromUserName,
-                    'type'=>$message->MsgType,
-                    'content'=>$message->Content,
+                    'open_id'=>$message['FromUserName'],
+                    'type'=>$message['MsgType'],
+                    'content'=>$message['Content'],
                 ];
+
                 $data = $this->BackCurl($url.'/wechat_call_back/message', $method = self::GET, $params);
 
                 return $this->BackMessage($data);
@@ -207,80 +214,68 @@ class MessageService
     {
         if(count($data)>0){
             foreach ($data  as $k=>$item){
+
                 if(!empty($item) And isset($item['type'])){
+
                     //授权
                     $server=$this->platformService->authorizeAPI($item['app_id']);
 
-                    $message='';
+                    $message=[];
 
                     switch ($item['type']) {
                         case 'text':
-                            $message='{
-                                  "touser":"'.$item['open_id'].'",
-                                  "msgtype":"text",
-                                  "text":{
-                                           "content":"'.$item['content'].'",
-                                   },
-                                }';
+                            $message = new Text($item['content']);
                             break;
                         case 'image':
-                            $message='{
-                                  "touser":"'.$item['open_id'].'",
-                                  "msgtype":"image",
-                                  "image":{
-                                           "media_id":"'.$item['media_id'].'",
-                                   },
-                                }';
+                            $message = new Image($item['media_id']);
                             break;
                         case 'voice':
-
+                            $message = new Voice($item['media_id']);
                             break;
-
                         case 'video':
-
-                            $message='{
-                                  "touser":"'.$item['open_id'].'",
-                                  "msgtype":"video",
-                                  "video":{
-                                           "media_id":"'.$item['media_id'].'",
-                                            "thumb_media_id":"'.$item['thumb_media_id'].'",
-                                            "title":"'.$item['title'].'",
-                                            "description":"'.$item['description'].'",
-                                   },
-                                }';
+                            $message = new Video($item['media_id'],
+                                [
+                                'title' => $item['title'],
+                                 'description' => $item['description'],
+                            ]);
                             break;
-
                         case 'article':
-                                $news = new News([
-                                    'title'       =>$item['title'],
-                                    'description' =>$item['description'],
-                                    'url'         =>$item['url'],
-                                    'image'       => $item['image'],
-                                ]);
 
-                                return $news;
+                            if(isset($item['article']) AND count($item['article'])>0){
+
+                                foreach ($item['article'] as $ak=>$article_item){
+                                    $items[]=
+                                         new NewsItem([
+                                        'title'       => $article_item['title'],
+                                        'description' => $article_item['description'],
+                                        'url'         => $article_item['url'],
+                                        'image'       => $article_item['image'],
+                                       ]);
+                                    ;
+                                }
+                            }
+
+                            return new News($items);
+                            break;
 
                         case 'card':
-                            $message='{
-                                  "touser":"'.$item['open_id'].'",
-                                  "msgtype":"wxcard",
-                                  "wxcard":{
-                                           "card_id":"'.$item['card_id'].'",
-                                   },
-                                }';
+                            $message = new Card($item['card_id']);
                             break;
-
                         // 其它消息
                         default:
                             return '';
                             break;
                     }
 
-                   return $server->staff->send($message);
+                    $server->customer_service->message($message)->to($item['open_id'])->send();
+
+
                 }
 
             }
         }
+
+
     }
 
 
@@ -296,4 +291,6 @@ class MessageService
         \Log::info($data);
         return $this->BackMessage($data);
     }
+
+
 }

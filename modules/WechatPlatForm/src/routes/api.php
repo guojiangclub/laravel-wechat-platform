@@ -12,9 +12,9 @@ Route::any('/notify/{appid}', 'NotifyController@notifyAccount');
 
 
 $router->group(['middleware'=>'client'],function () use($router){
-     // 获取授权公众号列表
+     // 获取授权公众号或小程序列表
     $router->get('authorizers', 'AuthorizerController@index');
-    //取消授权删除授权公众号
+    //取消授权删除授权
     $router->any('del', 'AuthorizerController@update');
 });
 
@@ -121,6 +121,16 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
 
     });
 
+
+    // --------------------------------群发----------------------------//
+
+    $router->group(['prefix'=>'broadcast'],function ($router){
+        //群发发送消息
+        $router->post('/send', 'BroadcastController@send');
+    });
+
+
+
     // ---------------------------获取jsapi_ticket----------------------------//
 
     $router->group(['prefix'=>'js'],function ($router){
@@ -165,16 +175,107 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
     });
 
 
+    // ---------------------------素材----------------------------//
+
+    $router->post('/media/upload/image', 'MediasController@RemoteImage');
+
+    $router->group(['prefix'=>'medias'],function ($router){
+        //上传图片素材
+        $router->post('/remote/image', 'MediasController@RemoteImage');
+        //上传图文消息图片
+        $router->post('/remote/article/image', 'MediasController@RemoteArticleImage');
+        //上传缩略图用于视频封面或者音乐封面
+        $router->post('/remote/thumb/image', 'MediasController@RemoteThumbImage');
+        //上传视频素材
+        $router->post('/remote/video', 'MediasController@RemoteVideo');
+        //上传音频素材
+        $router->post('/remote/voice', 'MediasController@RemoteVoice');
+        //删除永久素材
+        $router->post('/delete', 'MediasController@delete');
+        //上传永久图文消息
+        $router->post('/remote/article', 'MediasController@RemoteArticle');
+       //修改图文素材
+        $router->post('/update/article', 'MediasController@updateArticle');
+        //获取素材通过mediaId.
+        $router->post('/get', 'MediasController@get');
+        //获取永久素材列表
+        $router->post('/lists', 'MediasController@getLists');
+        //获取素材计数
+        $router->get('/stats', 'MediasController@stats');
+    });
 
 
 
 
+    // ---------------------------优惠券和除会员卡外其他卡券----------------------------//
+    $router->group(['prefix'=>'coupon'],function ($router){
+        //创建卡券
+        $router->post('/create', 'CouponController@create');
+        //创建货架
+        $router->post('/landing-page/create', 'CouponController@createLandingPage');
+        //获取卡券颜色
+        $router->get('/colors', 'CouponController@getColors');
+        //设置测试白名单
+        $router->post('/setTestWhitelist', 'CouponController@setTestWhitelist');
+        //创建二维码
+        $router->post('/QRCode', 'CouponController@QRCode');
+        //ticket 换取二维码链接
+        $router->post('/getQrCodeUrl', 'CouponController@getQrCodeUrl');
+        //查看卡券详情
+        $router->post('/getinfo', 'CouponController@getInfo');
+        //更改卡券信息
+        $router->post('/update', 'CouponController@update');
+        //更改卡券库存接口.
+        $router->post('/update/quantityt', 'CouponController@updateQuantity');
+        //设置卡券失效
+        $router->post('/disable', 'CouponController@disable');
+        //删除卡券
+        $router->post('/delete', 'CouponController@delete');
+        //查询code
+        $router->post('/getCode', 'CouponController@getCode');
+        //核销Code
+        $router->post('/consumeCode', 'CouponController@consumeCode');
+    });
 
 
 
+    // ---------------------------会员卡----------------------------//
+    $router->group(['prefix'=>'card'],function ($router){
+        //上传会员卡背景图
+        $router->post('/card/upload/image', 'MediasController@RemoteCardImage');
+        //创建会员卡
+        $router->post('/create', 'CardController@create');
+        //查看会员卡详情
+        $router->post('/getinfo', 'CardController@getCard');
+        //创建货架
+        $router->post('/landing-page/create', 'CardController@createLandingPage');
+        //激活会员卡
+        $router->post('/membership/activate', 'CardController@membershipActivate');
+        //更新会员信息.
+        $router->post('/membership/update', 'CardController@membershipUpdate');
+        //删除卡券
+        $router->post('/delete', 'CardController@delete');
+        //获取卡券颜色
+        $router->get('/colors', 'CardController@getColors');
+        //获取会员信息
+        $router->post('/membership/get', 'CardController@setTestWhitelist');
+        //设置测试白名单
+        $router->post('/setTestWhitelist', 'CardController@setTestWhitelist');
+        //创建二维码
+        $router->post('/QRCode', 'CardController@QRCode');
+        //更改会员卡券信息
+        $router->post('/update/member_card', 'CardController@updateCard');
+        // 拉取会员信息
+        $router->post('/membership/get', 'CardController@membershipGet');
+        //更改会员卡库存
+        $router->post('/update/quantityt', 'CardController@updateQuantity');
+        //设置会员卡券失效
+        $router->post('/disable', 'CardController@disable');
+        //checkCode
+        $router->post('/getCode', 'CardController@getCode');
 
 
-
+    });
 
 
 });

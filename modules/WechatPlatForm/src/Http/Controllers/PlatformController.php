@@ -20,7 +20,7 @@ class PlatformController extends Controller
 
 
     /**
-     * 引导用户进入授权页.
+     * 微信公众号授权页.
      * @return mixed
      */
 
@@ -31,12 +31,46 @@ class PlatformController extends Controller
 
 //       $redirectUrl = request('redirect_url');
 
+        $authCode=request('authCode');
+
         $callback = route('component.auth.result', ['client_id' => $clientId]);
 
         $url=$this->platformService->authRedirectUrl($callback);
 
+        if(!strstr($url,"auth_type"))
+        {
+            $url.='&auth_type=1';
+        }
         return view('wechat-platform::platform.auth', ['redirect_url' => $url]);
     }
+
+
+
+    /**
+     * 小程序授权页.
+     * @return mixed
+     */
+
+    public function authMini()
+    {
+
+        $clientId = request('client_id');
+
+        $authCode=request('authCode');
+
+        $callback = route('component.auth.result', ['client_id' => $clientId]);
+
+        $url=$this->platformService->authRedirectUrl($callback);
+
+        if(!strstr($url,"auth_type"))
+        {
+            $url.='&auth_type=2';
+        }
+        return view('wechat-platform::platform.auth', ['redirect_url' => $url]);
+    }
+
+
+
 
     /**
      * 保存授权信息.
@@ -45,12 +79,13 @@ class PlatformController extends Controller
      */
     public function authResult()
     {
+
         $auth_code = request('auth_code');
         $authorizer=$this->platformService->saveAuthorization($auth_code);
-        if ($clientId = request('client_id')) {
-            $authorizer->client_id = $clientId;
-            $authorizer->save();
-        }
+//        if ($clientId = request('client_id')) {
+//            $authorizer->client_id = $clientId;
+//            $authorizer->save();
+//        }
         return '授权成功！';
     }
 
@@ -70,6 +105,6 @@ class PlatformController extends Controller
         $token = $client->createToken($client->secret)->accessToken;
 
         return response()
-            ->json(['token_type' => 'Bearer', 'access_token' => $token]);
+            ->json(['token_type' => 'Bearer', 'access_token' => $token,'expires_in'=>864000]);
     }
 }

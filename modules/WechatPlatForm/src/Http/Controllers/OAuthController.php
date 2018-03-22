@@ -36,7 +36,7 @@ class OAuthController extends Controller
         // 参数
         $appid = request('appid');
 
-        $scope = ! empty(request('scope')) ? request('scope') : 'snsapi_userinfo';
+        $scope = !empty(request('scope')) ? request('scope') : 'snsapi_userinfo';
 
         $server= $this->platformService->authorizeAPI($appid);
 

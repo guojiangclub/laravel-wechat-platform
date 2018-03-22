@@ -67,9 +67,9 @@ class PlatformService
      * @param $callback
      * @return mixed
      */
-    public function authRedirectUrl($callback)
+    public function authRedirectUrl($callback,$authCode=null)
     {
-        return $this->server->getPreAuthorizationUrl($callback);
+        return $this->server->getPreAuthorizationUrl($callback,$authCode);
     }
 
     /**
@@ -88,6 +88,9 @@ class PlatformService
 
         // 获取公众号基本信息
         $authorzer_info = $this->server->getAuthorizer($info['authorizer_appid']);
+
+        \Log::info($authorzer_info);
+
         $basic_info = $authorzer_info['authorizer_info'];
 
         // 创建一个授权对象
@@ -108,6 +111,10 @@ class PlatformService
         $authorizer->principal_name = urldecode($basic_info['principal_name']);
         $authorizer->qrcode_url = $basic_info['qrcode_url'];
 
+        if(isset($basic_info['MiniProgramInfo'])){
+            $authorizer->mini_info =\GuzzleHttp\json_encode($basic_info['MiniProgramInfo']);
+            $authorizer->type = 2;
+        }
         // 保存到数据库
         $authorizer->save();
 

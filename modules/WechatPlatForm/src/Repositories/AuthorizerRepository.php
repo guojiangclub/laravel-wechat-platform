@@ -37,10 +37,11 @@ class AuthorizerRepository extends BaseRepository
         return $authorizer;
     }
 
-    public function getAuthorizersByClient($clientId)
+    public function getAuthorizersByClient($clientId,$type=1)
     {
-        return Authorizer::where('client_id', $clientId)->get();
+        return Authorizer::where('client_id', $clientId)->where('type', $type)->get();
     }
+
 
     public function updateCallBackUrl($clientId, $url)
     {

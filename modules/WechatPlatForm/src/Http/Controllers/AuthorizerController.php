@@ -17,15 +17,17 @@ class AuthorizerController extends Controller
 
     public function index()
     {
+
+        $type = request('type')?request('type'):1;
         $call_back_url = request('call_back_url');
         if ($clientId = request('client_id') AND auth('clients')->user()->id==$clientId) {
-            $res = $this->repository->getAuthorizersByClient($clientId);
+            $res = $this->repository->getAuthorizersByClient($clientId,$type);
             if (count($res) > 0 && ! empty($call_back_url)) {
                 $this->repository->updateCallBackUrl($clientId, $call_back_url);
             }
-            return $this->repository->getAuthorizersByClient($clientId);
+            return $this->repository->getAuthorizersByClient($clientId,$type);
         }
-        return '';
+        return null;
     }
 
     public function update()
