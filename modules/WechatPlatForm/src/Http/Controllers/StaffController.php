@@ -63,7 +63,7 @@ class StaffController extends Controller
         $server=$this->platform->authorizeAPI($appid);
 
         // 调用接口
-        $result = $server->customer_service->list();
+        $result = $server->customer_service->online();
 
         // 返回JSON
         return $result;
@@ -274,19 +274,27 @@ class StaffController extends Controller
         // 调用接口
         $result =$server->customer_service_session->get($data['openid']);
 
-        if(!isset($result->kf_account)){
+        $data_new=[];
 
-            if($res= $server->customer_service_session->create($data['kf_account'],$data['openid'])){
+        if(!isset($result['kf_account']) || empty($result['kf_account']) ){
+
+            $res= $server->customer_service_session->create($data['kf_account'],$data['openid']);
+
+            if(isset($res->errmsg) AND $res->errmsg=='ok'){
 
                 $rest = $server->customer_service_session->get($data['openid']);
 
-                $data=$this->getNickName($rest['kf_account'],$appid);
+                $data_new=$this->getNickName($rest['kf_account'],$appid);
 
-                return ['nick_name'=>$data];
             }
+
+        }else{
+
+            $data_new=$this->getNickName($result['kf_account'],$appid);
+
         }
 
-        return [];
+        return ['nick_name'=>$data_new];
 
     }
 
