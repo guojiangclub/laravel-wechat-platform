@@ -277,6 +277,11 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
 
     });
 
+    // ---------------------------数据----------------------------//
+    $router->group(['prefix'=>'data'],function ($router){
+        $router->get('/{str}', 'DataController@DataCube');
+    });
+
 
 });
 
