@@ -275,7 +275,7 @@ class MessageService
             }
         }
 
-
+        return '';
     }
 
 
