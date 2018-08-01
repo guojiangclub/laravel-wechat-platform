@@ -1,10 +1,22 @@
 <?php
 
+/*
+ * This file is part of ibrand/wechat-platform.
+ *
+ * (c) iBrand <https://www.ibrand.cc>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace iBrand\Wechat\Platform\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use iBrand\Wechat\Platform\Models\Authorizer;
+use Prettus\Repository\Eloquent\BaseRepository;
 
+/**
+ * Class AuthorizerRepository.
+ */
 class AuthorizerRepository extends BaseRepository
 {
     public function model()
@@ -16,6 +28,7 @@ class AuthorizerRepository extends BaseRepository
      * 获取APP授权.
      *
      * @param $appid
+     *
      * @return Authorizer
      */
     public function getAuthorizer($appid)
@@ -29,6 +42,8 @@ class AuthorizerRepository extends BaseRepository
      * 获取APP授权, 不存在则创建一个.
      *
      * @param $appid
+     *
+     * @return mixed
      */
     public function ensureAuthorizer($appid)
     {
@@ -37,36 +52,61 @@ class AuthorizerRepository extends BaseRepository
         return $authorizer;
     }
 
-    public function getAuthorizersByClient($clientId,$type=1)
+    /**
+     * @param $clientId
+     * @param int $type
+     *
+     * @return mixed
+     */
+    public function getAuthorizersByClient($clientId, $type = 1)
     {
         return Authorizer::where('client_id', $clientId)->where('type', $type)->get();
     }
 
-
+    /**
+     * @param $clientId
+     * @param $url
+     *
+     * @return mixed
+     */
     public function updateCallBackUrl($clientId, $url)
     {
-        return Authorizer::where('client_id', $clientId)->update(['call_back_url'=>$url]);
+        return Authorizer::where('client_id', $clientId)->update(['call_back_url' => $url]);
     }
 
-
+    /**
+     * @param $clientId
+     * @param $app_id
+     *
+     * @return mixed
+     */
     public function updateDel($clientId, $app_id)
     {
-        return Authorizer::where(['client_id'=>$clientId,'appid'=>$app_id])->update(['client_id'=>0]);
+        return Authorizer::where(['client_id' => $clientId, 'appid' => $app_id])->update(['client_id' => 0]);
     }
 
+    /**
+     * @param $appId
+     *
+     * @return string
+     */
     public function getCallBackUrl($appId)
     {
         $res = Authorizer::where('appid', $appId)->first(['call_back_url'])->toArray();
 
-        return isset($res['call_back_url'])?$res['call_back_url']:'';
+        return isset($res['call_back_url']) ? $res['call_back_url'] : '';
     }
 
-    public function getAuthorizationByAppID($app_id){
-        $authorizer=Authorizer::where(['appid'=>$app_id])->first();
-        if($authorizer AND $authorizer->client_id){
+    /**
+     * @param $app_id
+     */
+    public function getAuthorizationByAppID($app_id)
+    {
+        $authorizer = Authorizer::where(['appid' => $app_id])->first();
+        if ($authorizer and $authorizer->client_id) {
             return  $authorizer;
         }
+
         return null;
     }
-
 }

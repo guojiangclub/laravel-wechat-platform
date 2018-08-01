@@ -1,30 +1,40 @@
 <?php
 
+/*
+ * This file is part of ibrand/wechat-platform.
+ *
+ * (c) iBrand <https://www.ibrand.cc>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
-use iBrand\Wechat\Platform\Services\PlatformService;
 use EasyWeChat\Kernel\Messages\Article;
 use Exception;
+use iBrand\Wechat\Platform\Services\PlatformService;
 
 /**
- * 菜单.
+ * 素材
+ * Class MediasController.
  */
 class MediasController extends Controller
 {
-
     protected $platform;
 
     public function __construct(
-
         PlatformService $platformService
-
     ) {
-
         $this->platform = $platformService;
     }
 
     /**
      * 上传图片素材.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function RemoteImage()
     {
@@ -37,7 +47,7 @@ class MediasController extends Controller
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //修改文件名
         rename($file->getPathname(), '/tmp/'.$file->getClientOriginalName());
@@ -50,6 +60,10 @@ class MediasController extends Controller
 
     /**
      * 上传图文消息图片.
+     *
+     * @return mixed|null
+     *
+     * @throws Exception
      */
     public function RemoteArticleImage()
     {
@@ -62,7 +76,7 @@ class MediasController extends Controller
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //修改文件名
         rename($file->getPathname(), '/tmp/'.$file->getClientOriginalName());
@@ -70,14 +84,19 @@ class MediasController extends Controller
         //调用接口
         $result = $server->material->uploadArticleImage('/tmp/'.$file->getClientOriginalName());
 
-        if(isset($result['url']))  return $result['url'];
+        if (isset($result['url'])) {
+            return $result['url'];
+        }
 
         return null;
-
     }
 
     /**
-     * 上传缩略图用于视频封面或者音乐封面
+     * 上传缩略图用于视频封面或者音乐封面.
+     *
+     * @return mixed|null
+     *
+     * @throws Exception
      */
     public function RemoteThumbImage()
     {
@@ -85,13 +104,12 @@ class MediasController extends Controller
 
         $file = request()->file('image');
 
-
         if (empty($file)) {
             throw new Exception('cannot not find file.', 5);
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //修改文件名
         rename($file->getPathname(), '/tmp/'.$file->getClientOriginalName());
@@ -99,14 +117,19 @@ class MediasController extends Controller
         //调用接口
         $result = $server->material->uploadThumb('/tmp/'.$file->getClientOriginalName());
 
-        if(isset($result->url))  return $result->url;
+        if (isset($result->url)) {
+            return $result->url;
+        }
 
         return null;
     }
 
-
     /**
      * 上传视频素材.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function RemoteVideo()
     {
@@ -123,7 +146,7 @@ class MediasController extends Controller
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //修改文件名
         rename($file->getPathname(), '/tmp/'.$file->getClientOriginalName());
@@ -134,12 +157,15 @@ class MediasController extends Controller
         return $result;
     }
 
-
     /**
      * 上传音频素材.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
-    public function RemoteVoice(){
-
+    public function RemoteVoice()
+    {
         $appid = request('appid');
 
         $file = request()->file('video');
@@ -149,7 +175,7 @@ class MediasController extends Controller
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //修改文件名
         rename($file->getPathname(), '/tmp/'.$file->getClientOriginalName());
@@ -158,12 +184,14 @@ class MediasController extends Controller
         $result = $server->material->uploadVoice('/tmp/'.$file->getClientOriginalName());
 
         return $result;
-
     }
-
 
     /**
      * 删除永久素材.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function delete()
     {
@@ -174,7 +202,7 @@ class MediasController extends Controller
         $mediaId = $data['mediaId'];
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->material->delete($mediaId);
@@ -182,10 +210,12 @@ class MediasController extends Controller
         return $result;
     }
 
-
-
     /**
      * 上传永久图文消息.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function RemoteArticle()
     {
@@ -205,17 +235,19 @@ class MediasController extends Controller
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
         //调用接口
         $result = $server->material->uploadArticle($article);
 
         return $result;
     }
 
-
-
     /**
-     * 获取素材通过mediaId.
+     * 取素材通过mediaId.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
     public function get()
     {
@@ -225,7 +257,7 @@ class MediasController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->material->get($data['mediaId']);
@@ -235,6 +267,10 @@ class MediasController extends Controller
 
     /**
      * 获取永久素材列表.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function getLists()
     {
@@ -244,7 +280,7 @@ class MediasController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->material->list($data['type'], $data['offset'], $data['count']);
@@ -254,6 +290,10 @@ class MediasController extends Controller
 
     /**
      * 获取素材计数.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function stats()
     {
@@ -263,7 +303,7 @@ class MediasController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->material->stats();
@@ -273,6 +313,10 @@ class MediasController extends Controller
 
     /**
      * 修改图文素材.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function updateArticle()
     {
@@ -282,7 +326,7 @@ class MediasController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
 
@@ -290,16 +334,19 @@ class MediasController extends Controller
             $result = $server->material->updateArticle($data['mediaId'], $data['data'], $data['index']);
         } else {
             $result = $server->material->updateArticle($data['mediaId'], $data['data']);
-
         }
 
-        \Log::info( $data['data']);
+        \Log::info($data['data']);
+
         return $result;
     }
 
-
     /**
      * 上传会员卡背景图片.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
     public function RemoteCardImage()
     {
@@ -312,7 +359,7 @@ class MediasController extends Controller
         }
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //修改文件名
         rename($file->getPathname(), '/tmp/'.$file->getClientOriginalName());
@@ -321,7 +368,5 @@ class MediasController extends Controller
         $result = $server->material->uploadArticleImage('/tmp/'.$file->getClientOriginalName());
 
         return $result;
-
     }
-
 }

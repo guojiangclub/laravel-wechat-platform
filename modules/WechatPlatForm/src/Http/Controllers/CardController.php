@@ -1,31 +1,39 @@
 <?php
 
+/*
+ * This file is part of ibrand/wechat-platform.
+ *
+ * (c) iBrand <https://www.ibrand.cc>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
 use Exception;
-use iBrand\Wechat\Platform\Services\MessageService;
 use iBrand\Wechat\Platform\Services\PlatformService;
 
 /**
  * 会员卡
+ * Class CardController.
  */
 class CardController extends Controller
 {
-
     protected $platform;
 
     public function __construct(
-
         PlatformService $platformService
-
     ) {
-
         $this->platform = $platformService;
     }
 
-
     /**
      * 创建会员卡
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
     public function create()
     {
@@ -35,32 +43,33 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //兼容以前代码
-        if(isset($data['card']['member_card']['base_info'])){
-            $baseInfo=$data['card']['member_card']['base_info'];
-            $especial=isset($data['card']['member_card']['especial'])?$data['card']['member_card']['especial']:[];
-        }else{
-            $baseInfo=$data['base_info'];
-            $especial=isset($data['especial'])?$data['especial']:[];
+        if (isset($data['card']['member_card']['base_info'])) {
+            $baseInfo = $data['card']['member_card']['base_info'];
+            $especial = isset($data['card']['member_card']['especial']) ? $data['card']['member_card']['especial'] : [];
+        } else {
+            $baseInfo = $data['base_info'];
+            $especial = isset($data['especial']) ? $data['especial'] : [];
         }
 
-        $attributes=array_merge(['base_info' => $baseInfo], $especial);
+        $attributes = array_merge(['base_info' => $baseInfo], $especial);
 
         //调用接口
-        $result = $server->card->create('member_card',$attributes );
+        $result = $server->card->create('member_card', $attributes);
 
         //返回json
         return $result;
     }
 
-
-
     /**
      * 创建货架.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function createLandingPage()
     {
         // 参数
@@ -69,7 +78,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->card->createLandingPage($data['banner'], $data['page_title'], $data['can_share'], $data['scene'], $data['card_list']);
@@ -78,13 +87,13 @@ class CardController extends Controller
         return $result;
     }
 
-
-
-
     /**
      * 激活会员卡
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function membershipActivate()
     {
         // 参数
@@ -93,7 +102,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->card->member_card->activate($data);
@@ -102,13 +111,13 @@ class CardController extends Controller
         return $result;
     }
 
-
-
-
     /**
      * 更新会员信息.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function membershipUpdate()
     {
         // 参数
@@ -117,7 +126,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->card->member_card->updateUser($data);
@@ -126,12 +135,13 @@ class CardController extends Controller
         return $result;
     }
 
-
-
     /**
      * 删除会员卡
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function delete()
     {
         // 参数
@@ -140,7 +150,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->card->delete($data['card_id']);
@@ -149,30 +159,33 @@ class CardController extends Controller
         return $result;
     }
 
-
     /**
-     * 获取卡券颜色
+     * 获取卡券颜色.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function getColors()
     {
         // 参数
         $appid = request('appid');
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
-        $result = $server->card->colors();;
+        $result = $server->card->colors();
 
         return $result;
     }
 
-
-
     /**
-     * 查看会员卡详情
+     * 查看会员卡详情.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function getCard()
     {
         // 参数
@@ -180,7 +193,7 @@ class CardController extends Controller
 
         $data = request()->json()->all();
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->card->get($data['card_id']);
@@ -188,11 +201,13 @@ class CardController extends Controller
         return $result;
     }
 
-
     /**
-     * 设置测试白名单
+     * 设置测试白名单.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function setTestWhitelist()
     {
         // 参数
@@ -201,7 +216,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->card->setTestWhitelist($data['openids']);
@@ -209,9 +224,13 @@ class CardController extends Controller
         return $result;
     }
 
-
-
-    // 创建二维码
+    /**
+     * 创建二维码
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
     public function QRCode()
     {
         // 参数
@@ -220,7 +239,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         //调用接口
         $result = $server->card->createQrCode($data['cards']);
@@ -228,13 +247,13 @@ class CardController extends Controller
         return $result;
     }
 
-
-
-
     /**
-     * 更改会员卡券信息
+     * 更改会员卡券信息.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function updateCard()
     {
         // 参数
@@ -243,25 +262,27 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
-        $baseInfo=$data['base_info'];
+        $baseInfo = $data['base_info'];
 
-        $especial=isset($data['especial'])?$data['especial']:[];
+        $especial = isset($data['especial']) ? $data['especial'] : [];
 
-        $attributes=array_merge(['base_info' => $baseInfo], $especial);
+        $attributes = array_merge(['base_info' => $baseInfo], $especial);
 
         //调用接口
-        $result = $server->card->update($data['card_id'],'member_card',$attributes);
+        $result = $server->card->update($data['card_id'], 'member_card', $attributes);
 
         return $result;
     }
 
-
     /**
-     * 拉取会员信息接口
+     * 拉取会员信息接口.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function membershipGet()
     {
         // 参数
@@ -269,7 +290,7 @@ class CardController extends Controller
 
         $data = request()->json()->all();
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->card->member_card->getUser($data['card_id'], $data['code']);
@@ -278,11 +299,13 @@ class CardController extends Controller
         return $result;
     }
 
-
     /**
-     * 更改库存接口
+     * 更改库存接口.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws Exception
      */
-
     public function updateQuantity()
     {
         // 参数
@@ -291,7 +314,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         if ($data['amount'] >= 0) {
@@ -307,12 +330,13 @@ class CardController extends Controller
         return $result;
     }
 
-
-
     /**
-     * 会员卡Code失效
+     * 会员卡Code失效.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function disable()
     {
         // 参数
@@ -321,7 +345,7 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->card->code->disable($data['code'], $data['card_id']);
@@ -330,11 +354,13 @@ class CardController extends Controller
         return $result;
     }
 
-
     /**
-     * 查询 Code 接口
+     * 查询 Code 接口.
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-
     public function getCode()
     {
         // 参数
@@ -343,10 +369,10 @@ class CardController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
-        $result = $server->card->code->get($data['code'], $data['card_id'],false);
+        $result = $server->card->code->get($data['code'], $data['card_id'], false);
 
         // 返回json
         return $result;

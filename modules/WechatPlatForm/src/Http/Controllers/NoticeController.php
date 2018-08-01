@@ -1,16 +1,24 @@
 <?php
 
+/*
+ * This file is part of ibrand/wechat-platform.
+ *
+ * (c) iBrand <https://www.ibrand.cc>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
 use iBrand\Wechat\Platform\Services\PlatformService;
 
 /**
  * 模板消息.
+ * Class NoticeController.
  */
-
 class NoticeController extends Controller
 {
-
     protected $platform;
 
     public function __construct(
@@ -19,16 +27,20 @@ class NoticeController extends Controller
         $this->platform = $platformService;
     }
 
-
     /**
      * 获取支持的行业列表.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \Exception
      */
-    public function getIndustry(){
+    public function getIndustry()
+    {
         // 参数
         $appid = request('appid');
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->template_message->getIndustry();
@@ -37,29 +49,36 @@ class NoticeController extends Controller
         return $result;
     }
 
-
     /**
      * 添加模板
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \Exception
      */
-    public function addTemplate(){
+    public function addTemplate()
+    {
         // 参数
         $appid = request('appid');
 
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
-        $result = $server->template_message->addTemplate($data['shortId']);;
+        $result = $server->template_message->addTemplate($data['shortId']);
 
         // 返回JSON
         return $result;
     }
 
-
     /**
      * 获取所有模板列表.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \Exception
      */
     public function getTemplateAll()
     {
@@ -67,7 +86,7 @@ class NoticeController extends Controller
         $appid = request('appid');
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->template_message->getPrivateTemplates();
@@ -76,9 +95,12 @@ class NoticeController extends Controller
         return $result;
     }
 
-
     /**
      * 发送模板消息.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function send()
     {
@@ -88,7 +110,7 @@ class NoticeController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         // 调用接口
         $result = $server->template_message->send($data);
@@ -97,28 +119,36 @@ class NoticeController extends Controller
         return $result;
     }
 
-    /*
-     * 发送一次性订阅消息
+    /**
+     * 发送一次性订阅消息.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
-     public function sendSubscription(){
-         // 参数
-         $appid = request('appid');
+    public function sendSubscription()
+    {
+        // 参数
+        $appid = request('appid');
 
-         $data = request()->json()->all();
+        $data = request()->json()->all();
 
-         // 授权
-         $server=$this->platform->authorizeAPI($appid);
+        // 授权
+        $server = $this->platform->authorizeAPI($appid);
 
-         // 调用接口
-         $result = $server->template_message->sendSubscription($data);
+        // 调用接口
+        $result = $server->template_message->sendSubscription($data);
 
-         // 返回JSON
-         return $result;
-     }
-
+        // 返回JSON
+        return $result;
+    }
 
     /**
      * 删除模板.
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \Exception
      */
     public function delete()
     {
@@ -126,7 +156,7 @@ class NoticeController extends Controller
         $appid = request('appid');
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         $data = request()->json()->all();
 
@@ -137,9 +167,12 @@ class NoticeController extends Controller
         return $result;
     }
 
-
     /**
-     * 多用户发送模板消息
+     * 多用户发送模板消息.
+     *
+     * @return array|bool
+     *
+     * @throws \Exception
      */
     public function sendAll()
     {
@@ -149,7 +182,7 @@ class NoticeController extends Controller
         $data = request()->json()->all();
 
         // 授权
-        $server=$this->platform->authorizeAPI($appid);
+        $server = $this->platform->authorizeAPI($appid);
 
         $error = [];
 
@@ -164,13 +197,13 @@ class NoticeController extends Controller
                 // 调用接口
                 try {
                     $server->template_message->send($data);
-                    $i++;
+                    ++$i;
                 } catch (\Exception $e) {
                     $error[] = $data['touser'];
                 }
             }
         }
 
-        return ['success_num'=>$i, 'error'=>$error];
+        return ['success_num' => $i, 'error' => $error];
     }
 }

@@ -1,33 +1,39 @@
 <?php
 
-$router->get('/',function (){
+/*
+ * This file is part of ibrand/wechat-platform.
+ *
+ * (c) iBrand <https://www.ibrand.cc>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+$router->get('/', function () {
     dd('api');
 });
 
 // 平台授权事件接收URL
-$router->any('/notify','NotifyController@notifyPlatform');
+$router->any('/notify', 'NotifyController@notifyPlatform');
 // 公众号消息与事件接收URL
 Route::any('/notify/{appid}', 'NotifyController@notifyAccount');
 
-
-
-$router->group(['middleware'=>'client'],function () use($router){
-     // 获取授权公众号或小程序列表
+$router->group(['middleware' => 'client'], function () use ($router) {
+    // 获取授权公众号或小程序列表
     $router->get('authorizers', 'AuthorizerController@index');
     //取消授权删除授权
     $router->any('del', 'AuthorizerController@update');
 });
 
-
 // --------------------------------- 获取OAuth用户信息-----------------------------------//
-$router->group(['middleware'=>['client','parameter']],function () use($router){
-    $router->group(['prefix'=>'oauth'],function ($router){
+$router->group(['middleware' => ['client', 'parameter']], function () use ($router) {
+    $router->group(['prefix' => 'oauth'], function ($router) {
         $router->get('/user', 'OAuthController@userinfo');
     });
 });
 // ---------------------------------粉丝-----------------------------------//
-$router->group(['middleware'=>['client','parameter']],function () use($router){
-    $router->group(['prefix'=>'fans'],function ($router){
+$router->group(['middleware' => ['client', 'parameter']], function () use ($router) {
+    $router->group(['prefix' => 'fans'], function ($router) {
         //获取粉丝列表
         $router->get('/lists', 'FansController@lists');
         //获取单个粉丝信息
@@ -43,12 +49,10 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
     });
 });
 
+$router->group(['middleware' => ['client', 'parameter']], function () use ($router) {
+    // --------------------------------用户组（标签）----------------------------//
 
-$router->group(['middleware'=>['client','parameter']],function () use($router){
-
-// --------------------------------用户组（标签）----------------------------//
-
-    $router->group(['prefix'=>'fans/group'],function ($router){
+    $router->group(['prefix' => 'fans/group'], function ($router) {
         //获取标签组列表
         $router->get('/lists', 'FansGroupController@lists');
         //创建标签组
@@ -67,13 +71,13 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/userList', 'FansGroupController@UserList');
     });
 
-// --------------------------------菜单----------------------------//
+    // --------------------------------菜单----------------------------//
 
-    $router->group(['prefix'=>'menu'],function ($router){
+    $router->group(['prefix' => 'menu'], function ($router) {
         //查询已设置菜单
         $router->get('/lists', 'MenuController@getAll');
         //获取当前菜单
-        $router->get('/current','MenuController@getCurrent');
+        $router->get('/current', 'MenuController@getCurrent');
         //添加菜单(包括个性化菜单).
         $router->post('/store', 'MenuController@store');
         //删除菜单
@@ -82,11 +86,9 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/match', 'MenuController@match');
     });
 
+    // --------------------------------模板消息----------------------------//
 
-
-// --------------------------------模板消息----------------------------//
-
-    $router->group(['prefix'=>'notice'],function ($router){
+    $router->group(['prefix' => 'notice'], function ($router) {
         //获取支持的行业列表
         $router->get('/getIndustry', 'NoticeController@getIndustry');
         //获取所有模板列表
@@ -101,10 +103,9 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/delete', 'NoticeController@delete');
     });
 
+    // --------------------------------二维码--------------------------------//
 
-// --------------------------------二维码--------------------------------//
-
-    $router->group(['prefix'=>'qrcode'],function ($router){
+    $router->group(['prefix' => 'qrcode'], function ($router) {
         //创建临时二维码
         $router->post('/temporary', 'QRCodeController@storeTemporary');
         //创建永久二维码
@@ -115,36 +116,29 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
 
     // --------------------------------短网址服务----------------------------//
 
-    $router->group(['prefix'=>'shorten'],function ($router){
+    $router->group(['prefix' => 'shorten'], function ($router) {
         //创建临时二维码
         $router->post('/get', 'ShortenController@shorten');
-
     });
-
 
     // --------------------------------群发----------------------------//
 
-    $router->group(['prefix'=>'broadcast'],function ($router){
+    $router->group(['prefix' => 'broadcast'], function ($router) {
         //群发发送消息
         $router->post('/send', 'BroadcastController@send');
     });
 
-
-
     // ---------------------------获取jsapi_ticket----------------------------//
 
-    $router->group(['prefix'=>'js'],function ($router){
-
+    $router->group(['prefix' => 'js'], function ($router) {
         $router->get('/ticket', 'JsController@ticket');
 
         $router->get('/config', 'JsController@config');
-
     });
-
 
     // ---------------------------客服----------------------------//
 
-    $router->group(['prefix'=>'staff'],function ($router){
+    $router->group(['prefix' => 'staff'], function ($router) {
         //获取所有客服
         $router->get('/lists', 'StaffController@getLists');
         //获取所有在线的客服
@@ -171,15 +165,13 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/session/list', 'StaffController@customerSsessionList');
         //获取未接入会话列表
         $router->post('/session/waiting/list', 'StaffController@customerSsessionWaiting');
-
     });
-
 
     // ---------------------------素材----------------------------//
 
     $router->post('/media/upload/image', 'MediasController@RemoteImage');
 
-    $router->group(['prefix'=>'medias'],function ($router){
+    $router->group(['prefix' => 'medias'], function ($router) {
         //上传图片素材
         $router->post('/remote/image', 'MediasController@RemoteImage');
         //上传图文消息图片
@@ -194,7 +186,7 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/delete', 'MediasController@delete');
         //上传永久图文消息
         $router->post('/remote/article', 'MediasController@RemoteArticle');
-       //修改图文素材
+        //修改图文素材
         $router->post('/update/article', 'MediasController@updateArticle');
         //获取素材通过mediaId.
         $router->post('/get', 'MediasController@get');
@@ -204,11 +196,8 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->get('/stats', 'MediasController@stats');
     });
 
-
-
-
     // ---------------------------优惠券和除会员卡外其他卡券----------------------------//
-    $router->group(['prefix'=>'coupon'],function ($router){
+    $router->group(['prefix' => 'coupon'], function ($router) {
         //创建卡券
         $router->post('/create', 'CouponController@create');
         //创建货架
@@ -237,10 +226,8 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/consumeCode', 'CouponController@consumeCode');
     });
 
-
-
     // ---------------------------会员卡----------------------------//
-    $router->group(['prefix'=>'card'],function ($router){
+    $router->group(['prefix' => 'card'], function ($router) {
         //上传会员卡背景图
         $router->post('/card/upload/image', 'MediasController@RemoteCardImage');
         //创建会员卡
@@ -273,19 +260,10 @@ $router->group(['middleware'=>['client','parameter']],function () use($router){
         $router->post('/disable', 'CardController@disable');
         //checkCode
         $router->post('/getCode', 'CardController@getCode');
-
-
     });
 
     // ---------------------------数据----------------------------//
-    $router->group(['prefix'=>'data'],function ($router){
+    $router->group(['prefix' => 'data'], function ($router) {
         $router->get('/{str}', 'DataController@DataCube');
     });
-
-
 });
-
-
-
-
-

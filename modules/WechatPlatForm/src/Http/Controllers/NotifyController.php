@@ -1,33 +1,40 @@
 <?php
 
+/*
+ * This file is part of ibrand/wechat-platform.
+ *
+ * (c) iBrand <https://www.ibrand.cc>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
-use iBrand\Wechat\Platform\Services\PlatformService;
 use iBrand\Wechat\Platform\Services\MessageService;
+use iBrand\Wechat\Platform\Services\PlatformService;
 
-
+/**
+ * Class NotifyController.
+ */
 class NotifyController extends Controller
 {
-
     protected $platformService;
 
     protected $messageService;
 
     public function __construct(
-        PlatformService $platformService
-        ,MessageService $messageService
-    )
-    {
-        $this->platformService=$platformService;
-        $this->messageService=$messageService;
-
+        PlatformService $platformService, MessageService $messageService
+    ) {
+        $this->platformService = $platformService;
+        $this->messageService = $messageService;
     }
 
     /**
      * 授权事件接收URL.
      *
      * @param PlatformService $component
+     *
      * @return string
      */
     public function notifyPlatform()
@@ -35,14 +42,15 @@ class NotifyController extends Controller
         return $this->platformService->authEventProcess();
     }
 
-
     /**
      * 公众号消息与事件接收URL.
+     *
+     * @param $appid
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function notifyAccount($appid)
     {
-        return  $this->messageService->accountEventProcess($appid);
+        return $this->messageService->accountEventProcess($appid);
     }
-
-
 }
