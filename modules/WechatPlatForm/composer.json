@@ -22,6 +22,10 @@
 
   "autoload": {
 
+    "files": [
+      "src/helpers.php"
+    ],
+
     "psr-4": {
       "iBrand\\Wechat\\Platform\\": "src/"
     }

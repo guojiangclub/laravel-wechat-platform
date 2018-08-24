@@ -10,8 +10,9 @@
  */
 
 $router->get('/', function () {
-    dd('api');
+    dd(request()->header('appid'));
 });
+
 
 // 平台授权事件接收URL
 $router->any('/notify', 'NotifyController@notifyPlatform');
@@ -262,8 +263,135 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->post('/getCode', 'CardController@getCode');
     });
 
-    // ---------------------------数据----------------------------//
+    // ---------------------------数据统计与分析----------------------------//
     $router->group(['prefix' => 'data'], function ($router) {
         $router->get('/{str}', 'DataController@DataCube');
+    });
+
+    // ----------------------------小程序相关----------------------//
+    $router->group(['middleware' => ['client', 'parameter'], 'prefix' => 'mini', 'namespace' => 'MiniProgram'], function () use ($router) {
+//        //小程序修改服务器地址
+//        $router->group(['prefix' => 'domain'], function ($router) {
+//            //设置小程序服务器域名
+//            $router->post('/modify', 'DomainController@modify');
+//            //设置小程序业务域名（仅供第三方代小程序调用）
+//            $router->post('/setWebviewDomain', 'DomainController@setWebviewDomain');
+//
+//        });
+
+        //体验成员管理
+        $router->group(['prefix' => 'tester'], function ($router) {
+            //获取体验者列表
+            $router->get('/list', 'TesterController@list');
+            //绑定微信用户为小程序体验者
+            $router->post('/bind', 'TesterController@bind');
+            //解除绑定小程序的体验者
+            $router->post('/unbind', 'TesterController@unbind');
+        });
+
+        //小程序代码管理
+        $router->group(['prefix' => 'code'], function ($router) {
+            //为授权的小程序帐号上传小程序代码
+            $router->post('/commit', 'CodeController@commit');
+            //获取体验小程序的体验二维码
+            $router->post('/getQrCode', 'CodeController@getQrCode');
+            //获取授权小程序帐号的可选类目
+            $router->get('/getCategory', 'CodeController@getCategory');
+            //获取小程序的第三方提交代码的页面配
+            $router->get('/getPage', 'CodeController@getPage');
+            //将第三方提交的代码包提交审核（仅供第三方开发者代小程序调用）
+            $router->post('/submitAudit', 'CodeController@submitAudit');
+            //获取审核结果
+            $router->get('/getAuditStatus', 'CodeController@getAuditStatus');
+            //查询最新一次提交的审核状态（仅供第三方代小程序调用）
+            $router->get('/getLatestAuditStatus', 'CodeController@getLatestAuditStatus');
+            //发布已通过审核的小程序（仅供第三方代小程序调用）
+            $router->get('/release', 'CodeController@release');
+            //小程序审核撤回
+            $router->get('/withdrawAudit', 'CodeController@withdrawAudit');
+            //小程序版本回退
+            $router->get('/rollbackRelease', 'CodeController@rollbackRelease');
+            //修改小程序线上代码的可见状态
+            $router->post('/changeVisitStatus', 'CodeController@changeVisitStatus');
+            //分阶段发布接口
+            $router->post('/grayRelease', 'CodeController@grayRelease');
+            //取消分阶段发布
+            $router->get('/revertGrayRelease', 'CodeController@revertGrayRelease');
+            //查询当前分阶段发布详情
+            $router->get('/getGrayRelease', 'CodeController@getGrayRelease');
+        });
+
+        //小程序模板消息设置
+        $router->group(['prefix' => 'template_message'], function ($router) {
+            //获取小程序模板库标题列表
+            $router->post('/list', 'TemplateMessageController@list');
+            //获取模板库某个模板标题下关键词库
+            $router->post('/get', 'TemplateMessageController@get');
+            //组合模板并添加至帐号下的个人模板库
+            $router->post('/add', 'TemplateMessageController@add');
+            //删除帐号下的某个模板
+            $router->post('/delete', 'TemplateMessageController@delete');
+            //获取帐号下已存在的模板列表
+            $router->post('/getTemplates', 'TemplateMessageController@getTemplates');
+            //发送小程序模板消息
+            $router->post('/send', 'TemplateMessageController@send');
+        });
+
+        //小程序基础接口
+        $router->group(['prefix' => 'base'], function ($router) {
+            //根据jsCode获取用户session信息
+            $router->post('/session', 'BaseController@session');
+        });
+
+        //数据统计与分析
+        $router->group(['prefix' => 'data'], function ($router) {
+            $router->get('/{str}', 'BaseController@DataCube');
+        });
+
+        //获取小程序码
+        $router->group(['prefix' => 'app_code'], function ($router) {
+            //永久有效适用于需要的码数量较少的业务场景
+            $router->post('/get', 'AppCodeController@get');
+            //小程序码适用于需要的码数量极多，或仅临时使用的业务场景
+            $router->post('/getUnlimit', 'AppCodeController@getUnlimit');
+            //获取小程序二维码
+            $router->post('/getQrCode', 'AppCodeController@getQrCode');
+        });
+
+        //客服
+        $router->group(['prefix' => 'staff'], function ($router) {
+            //获取所有客服
+            $router->get('/lists', 'StaffController@getLists');
+            //获取所有在线的客服
+            $router->get('/on_lines', 'StaffController@getOnLines');
+            //添加客服
+            $router->post('/create', 'StaffController@store');
+            //修改客服
+            $router->post('/update', 'StaffController@update');
+            //删除客服
+            $router->post('/delete', 'StaffController@delete');
+            //获取客服与客户聊天记录
+            $router->post('/messages', 'StaffController@messages');
+            //设置客服头像
+            $router->post('/setAvatar', 'StaffController@setAvatar');
+            //主动发送消息给用户
+            $router->post('/send/message', 'StaffController@sendMessage');
+            //邀请微信用户加入客服
+            $router->post('/invite', 'StaffController@invite');
+            //创建会话
+            $router->post('/session/create', 'StaffController@SessionCreate');
+            //关闭会话
+            $router->post('/session/close', 'StaffController@SessionClose');
+            //获取客服会话列表
+            $router->post('/session/list', 'StaffController@customerSsessionList');
+            //获取未接入会话列表
+            $router->post('/session/waiting/list', 'StaffController@customerSsessionWaiting');
+        });
+
+        //微信小程序消息解密
+        $router->group(['prefix' => 'decrypted'], function ($router) {
+            $router->post('/', 'BaseController@decryptedData');
+        });
+
     });
 });

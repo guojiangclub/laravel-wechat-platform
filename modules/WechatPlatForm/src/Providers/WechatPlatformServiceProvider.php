@@ -34,6 +34,10 @@ class WechatPlatformServiceProvider extends ServiceProvider
                 __DIR__.'/../config.php' => config_path('wechat-platform.php'),
             ]);
 
+            $this->publishes([
+                __DIR__.'/../mini_program_errcode.php' => config_path('mini_program_errcode.php'),
+            ]);
+
             return $this->loadMigrationsFrom(__DIR__.'/../../migrations');
         }
     }

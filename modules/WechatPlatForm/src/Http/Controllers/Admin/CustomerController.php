@@ -15,15 +15,20 @@ use Encore\Admin\Facades\Admin as LaravelAdmin;
 use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
 use iBrand\Wechat\Platform\Models\Clients;
+use iBrand\Wechat\Platform\Repositories\ClientsRepository as AdminClientsRepository;
 use Laravel\Passport\ClientRepository;
 
 class CustomerController extends Controller
 {
     protected $clientRepository;
 
-    public function __construct(ClientRepository $ClientRepository)
+    protected $adminClientsRepository;
+
+    public function __construct(ClientRepository $ClientRepository, AdminClientsRepository $adminClientsRepository)
     {
         $this->clientRepository = $ClientRepository;
+
+        $this->adminClientsRepository = $adminClientsRepository;
     }
 
     /**
@@ -33,7 +38,9 @@ class CustomerController extends Controller
     {
         $limit = request('limit') ? request('limit') : 20;
 
-        $customers = Clients::OrderBy('created_at', 'desc')->where('password_client', 1)->paginate($limit);
+        $name = request('name');
+
+        $customers = $this->adminClientsRepository->getListsByname($name, $limit);
 
         return LaravelAdmin::content(function (Content $content) use ($customers) {
             $content->header('客户列表');

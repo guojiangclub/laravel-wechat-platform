@@ -11,6 +11,7 @@
 
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
+use iBrand\Wechat\Platform\Repositories\AuthorizerRepository;
 use iBrand\Wechat\Platform\Services\MessageService;
 use iBrand\Wechat\Platform\Services\PlatformService;
 
@@ -23,11 +24,14 @@ class NotifyController extends Controller
 
     protected $messageService;
 
+    protected $authorizerRepository;
+
     public function __construct(
-        PlatformService $platformService, MessageService $messageService
+        PlatformService $platformService, MessageService $messageService, AuthorizerRepository $authorizerRepository
     ) {
         $this->platformService = $platformService;
         $this->messageService = $messageService;
+        $this->authorizerRepository = $authorizerRepository;
     }
 
     /**
@@ -51,6 +55,12 @@ class NotifyController extends Controller
      */
     public function notifyAccount($appid)
     {
+        $authorizer = $this->authorizerRepository->getAuthorizer($appid);
+
+        if (isset($authorizer->type) and 2 == $authorizer->type) {
+            return $this->messageService->miniProgramProcess($appid);
+        }
+
         return $this->messageService->accountEventProcess($appid);
     }
 }

@@ -16,37 +16,59 @@ use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
 use iBrand\Wechat\Platform\Models\Authorizer;
 use iBrand\Wechat\Platform\Models\Clients;
+use iBrand\Wechat\Platform\Repositories\AuthorizerRepository;
+use iBrand\Wechat\Platform\Services\CodeTemplateService;
 
+/**
+ * Class WechatController.
+ */
 class WechatController extends Controller
 {
+    protected $authorizerRepository;
+
+    protected $codeTemplateService;
+
+    public function __construct(AuthorizerRepository $authorizerRepository, CodeTemplateService $codeTemplateService)
+    {
+        $this->authorizerRepository = $authorizerRepository;
+
+        $this->codeTemplateService = $codeTemplateService;
+    }
+
     /**
      * @return Content
      */
     public function index()
     {
-        $customers = Clients::where('password_client', 1)->get();
+        $template_list = [];
 
-        $client_id = request('client_id');
+        $customers = Clients::all();
+
+        $type = request('type');
+
+        if (2 == $type) {
+            $template_list_arr = $this->codeTemplateService->getCodeTemplateList();
+
+            if (isset($template_list_arr['template_list'])) {
+                $template_list = $template_list_arr['template_list'];
+            }
+        }
 
         $limit = request('limit') ? request('limit') : 20;
 
-        $query = Authorizer::where('type', 1)->where('client_id', '<>', 0)->OrderBy('created_at', 'desc');
+        $lists = $this->authorizerRepository->getAuthorizerList(request('type'), request('client_id'), request('appid'), $limit);
 
-        if (null == !$client_id) {
-            $query = $query->where('client_id', $client_id);
-        }
+        $name = 1 == $type ? '公众号' : '小程序';
 
-        $lists = $query->paginate($limit);
-
-        return LaravelAdmin::content(function (Content $content) use ($lists, $customers) {
-            $content->header('公众号管理');
+        return LaravelAdmin::content(function (Content $content) use ($lists, $customers, $name, $type, $template_list) {
+            $content->header($name.'管理');
 
             $content->breadcrumb(
-                ['text' => '公众号管理', 'url' => 'customers/wechat', 'no-pjax' => 1],
-                ['text' => '公众号列表', 'url' => '', 'no-pjax' => 1, 'left-menu-active' => '公众号列表']
+                ['text' => $name.'管理', 'url' => 'wechat?type='.$type, 'no-pjax' => 1],
+                ['text' => $name.'列表', 'url' => '', 'no-pjax' => 1, 'left-menu-active' => $name.'列表']
             );
 
-            $content->body(view('wechat-platform::wechat.index', compact('lists', 'customers')));
+            $content->body(view('wechat-platform::wechat.index', compact('lists', 'customers', 'name', 'type', 'template_list')));
         });
     }
 

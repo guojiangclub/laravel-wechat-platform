@@ -7,6 +7,28 @@
         <div id="tab-1" class="tab-pane active">
             <div class="panel-body">
 
+                <div class="row" style="margin-bottom:20px;">
+
+                    <form action="{{route('admin.customers.list')}}" method="get">
+
+                        <div class="col-sm-4">
+                            <div class="input-group search_text col-sm-12">
+                                <input type="text" name="name" placeholder="name"
+                                       value="{{!empty(request('name'))?request('name'):''}}" class="form-control">
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input class="btn btn-info" type="submit" value="查询"/>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -32,21 +54,23 @@
                                 </td>
                                 <td>{{$item->created_at}}</td>
                                 <td>
-                                    <a no-pjax href="{{route('admin.customers.wechat.list',['client_id'=>$item->id])}}">查看</a>
+                                    <a no-pjax href="{{route('admin.wechat.list',['client_id'=>$item->id,'type'=>1])}}">查看</a>
                                     <span class="badge">
                                         {{$item->wechat->count()}}
                                     </span>
                                 </td>
                                 <td>
+                                    <a no-pjax href="{{route('admin.wechat.list',['client_id'=>$item->id,'type'=>2])}}">查看</a>
                                     <span class="badge"> {{$item->mini->count()}}</span>
                                 </td>
                                 <td>
-
-                                    <a class="btn btn-xs btn-danger delete-customer"
-                                       data-href="{{route('admin.customers.delete',['id'=>$item->id])}}">
-                                        <i data-toggle="tooltip" data-placement="top"
-                                           class="fa fa-trash"
-                                           title="删除"></i></a>
+                                    @if($item->id>2)
+                                        <a class="btn btn-xs btn-danger delete-customer"
+                                           data-href="{{route('admin.customers.delete',['id'=>$item->id])}}">
+                                            <i data-toggle="tooltip" data-placement="top"
+                                               class="fa fa-trash"
+                                               title="删除"></i></a>
+                                    @endif
 
                                 </td>
                             </tr>
@@ -113,9 +137,9 @@
                     });
                 } else {
                     swal({
-                        title: result.message,
-                        text: "",
-                        type: "warning"
+                        title: '删除失败',
+                        text: result.message,
+                        type: "error"
                     });
                 }
             });
@@ -136,7 +160,7 @@
                 inputPlaceholder: "请输入客户name"
             },
             function (inputValue) {
-                if (inputValue == "") {
+                if (!inputValue) {
                     swal.showInputError("请输入客户name");
                     return false
                 }

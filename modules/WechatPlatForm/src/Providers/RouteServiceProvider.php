@@ -85,7 +85,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $attributes = [
             'prefix' => config('admin.route.prefix'),
-            'namespace' => $this->namespace,
+            'namespace' => $this->namespace.'\Admin',
             'middleware' => config('admin.route.middleware'),
         ];
         Route::group($attributes, function ($router) {

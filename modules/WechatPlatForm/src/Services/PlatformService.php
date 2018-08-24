@@ -34,7 +34,7 @@ class PlatformService
      *
      * @var
      */
-    protected $server;
+    public $server;
 
     /**
      * ComponentService constructor.
@@ -139,20 +139,61 @@ class PlatformService
     }
 
     /**
-     * 给API对象授权
+     * 给公众号对象授权
      * 步骤5：利用授权码调用用户公众号的相关API.
      *
      * @param $appid
      */
-    public function authorizeAPI($appid)
+    public function authorizeAPI($appid, $type = 'officialAccount')
     {
-        // 获取Token
-        $authorizer = $this->authorizerRepository->getAuthorizationByAppID($appid);
+        $account = $this->getAccount($appid, $type);
 
-        if ($authorizer) {
-            return $officialAccount = $this->server->officialAccount($appid, $authorizer->refresh_token);
+        if (null == $account) {
+            throw new \Exception('Unauthorised', 3);
         }
 
-        throw new \Exception('Unauthorised', 3);
+        return $account;
+    }
+
+    /**
+     * 给小程序对象授权.
+     *
+     * @param $appid
+     *
+     * @return \EasyWeChat\OpenPlatform\Authorizer\MiniProgram\Application
+     *
+     * @throws \Exception
+     */
+    public function miniProgramAPI($appid)
+    {
+        $account = $this->getAccount($appid, $type = 'miniProgram');
+
+        if (null == $account) {
+            throw new \Exception('Unauthorised', 3);
+        }
+
+        return $account;
+    }
+
+    /**
+     * 获取授权对象
+     *
+     * @param $appId
+     * @param string $type
+     */
+    public function getAccount($appId, $type = 'miniProgram')
+    {
+        //获取token
+        $authorizer = $this->authorizerRepository->getAuthorizationByAppID($appId);
+
+        if (!$authorizer) {
+            return null;
+        }
+
+        if ('miniProgram' == $type) {
+            return $this->server->miniProgram($appId, $authorizer->refresh_token);
+        }
+
+        return $this->server->officialAccount($appId, $authorizer->refresh_token);
     }
 }

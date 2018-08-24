@@ -29,7 +29,7 @@ class WechatPlatFormBackendTablesSeeder extends Seeder
             'title' => '微信第三方平台管理',
             'icon' => '',
             'blank' => 1,
-            'uri' => 'customers',
+            'uri' => 'wechat_platform/customers',
             'created_at' => date('Y-m-d H:i:s', time()),
             'updated_at' => date('Y-m-d H:i:s', time()),
         ]);
@@ -51,7 +51,7 @@ class WechatPlatFormBackendTablesSeeder extends Seeder
             'title' => '客户列表',
             'icon' => '',
             'blank' => 1,
-            'uri' => 'customers',
+            'uri' => 'wechat_platform/customers',
             'created_at' => date('Y-m-d H:i:s', time()),
             'updated_at' => date('Y-m-d H:i:s', time()),
         ]);
@@ -73,7 +73,61 @@ class WechatPlatFormBackendTablesSeeder extends Seeder
             'title' => '公众号列表',
             'icon' => '',
             'blank' => 1,
-            'uri' => 'customers/wechat',
+            'uri' => 'wechat_platform/wechat?type=1',
+            'created_at' => date('Y-m-d H:i:s', time()),
+            'updated_at' => date('Y-m-d H:i:s', time()),
+        ]);
+
+        $minis = DB::table(config('admin.database.menu_table'))->insertGetId([
+            'parent_id' => $parent,
+            'order' => $lastOrder++,
+            'title' => '小程序管理',
+            'icon' => 'fa-bars',
+            'blank' => 1,
+            'uri' => '',
+            'created_at' => date('Y-m-d H:i:s', time()),
+            'updated_at' => date('Y-m-d H:i:s', time()),
+        ]);
+
+        DB::table(config('admin.database.menu_table'))->insertGetId([
+            'parent_id' => $minis,
+            'order' => $lastOrder++,
+            'title' => '小程序列表',
+            'icon' => '',
+            'blank' => 1,
+            'uri' => 'wechat_platform/wechat?type=2',
+            'created_at' => date('Y-m-d H:i:s', time()),
+            'updated_at' => date('Y-m-d H:i:s', time()),
+        ]);
+
+        DB::table(config('admin.database.menu_table'))->insertGetId([
+            'parent_id' => $minis,
+            'order' => $lastOrder++,
+            'title' => '服务器域名',
+            'icon' => '',
+            'blank' => 1,
+            'uri' => 'wechat_platform/mini/domain',
+            'created_at' => date('Y-m-d H:i:s', time()),
+            'updated_at' => date('Y-m-d H:i:s', time()),
+        ]);
+
+        DB::table(config('admin.database.menu_table'))->insertGetId([
+            'parent_id' => $minis,
+            'order' => $lastOrder++,
+            'title' => '小程序模板',
+            'icon' => '',
+            'blank' => 1,
+            'uri' => 'wechat_platform/mini/template?type=1',
+            'created_at' => date('Y-m-d H:i:s', time()),
+            'updated_at' => date('Y-m-d H:i:s', time()),
+        ]);
+        DB::table(config('admin.database.menu_table'))->insertGetId([
+            'parent_id' => $minis,
+            'order' => $lastOrder++,
+            'title' => '小程序主题',
+            'icon' => '',
+            'blank' => 1,
+            'uri' => 'wechat_platform/mini/theme',
             'created_at' => date('Y-m-d H:i:s', time()),
             'updated_at' => date('Y-m-d H:i:s', time()),
         ]);

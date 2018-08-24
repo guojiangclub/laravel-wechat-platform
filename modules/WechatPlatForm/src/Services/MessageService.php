@@ -19,6 +19,7 @@ use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\Video;
 use EasyWeChat\Kernel\Messages\Voice;
 use iBrand\Wechat\Platform\Repositories\AuthorizerRepository;
+use iBrand\Wechat\Platform\Repositories\CodePublishRepository;
 
 /**
  * 公众平台推送
@@ -36,14 +37,20 @@ class MessageService
 
     protected $platformService;
 
+    protected $codePublishRepository;
+
     public function __construct(
         AuthorizerRepository $authorizerRepository,
 
-        PlatformService $platformService
+        PlatformService $platformService,
+
+        CodePublishRepository $codePublishRepository
     ) {
         $this->authorizerRepository = $authorizerRepository;
 
         $this->platformService = $platformService;
+
+        $this->codePublishRepository = $codePublishRepository;
     }
 
     /**
@@ -187,6 +194,36 @@ class MessageService
                 $data = $this->BackCurl($url.'/wechat_call_back/message', $method = self::GET, $params);
 
                 return $this->BackMessage($data);
+            }
+
+            return '';
+        });
+
+        return $server->server->serve();
+    }
+
+    public function miniProgramProcess($appid)
+    {
+        //授权
+        $server = $this->platformService->miniProgramAPI($appid);
+
+        $server->server->push(function ($message) use ($appid) {
+            \Log::info($message);
+
+            //event事件
+            if ('event' == $message['MsgType']) {
+                switch ($message['Event']) {
+                    //小程序获取审核结果事件
+                    case 'weapp_audit_success':
+
+                        $audit = $this->codePublishRepository->getAuditByAppID($appid);
+
+                        $status = isset($message['Reason']) ? 1 : 0;
+
+                        $reason = isset($message['Reason']) ? $message['Reason'] : '';
+
+                        $this->codePublishRepository->renew($audit, $status, $reason = '');
+                }
             }
 
             return '';

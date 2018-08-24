@@ -33,7 +33,7 @@ class AuthorizerRepository extends BaseRepository
      */
     public function getAuthorizer($appid)
     {
-        $authorizer = Authorizer::where('appid', $appid)->first();
+        $authorizer = $this->model->where('appid', $appid)->first();
 
         return $authorizer;
     }
@@ -47,7 +47,7 @@ class AuthorizerRepository extends BaseRepository
      */
     public function ensureAuthorizer($appid)
     {
-        $authorizer = Authorizer::firstOrNew(['appid' => $appid]);
+        $authorizer = $this->model->firstOrNew(['appid' => $appid]);
 
         return $authorizer;
     }
@@ -60,7 +60,7 @@ class AuthorizerRepository extends BaseRepository
      */
     public function getAuthorizersByClient($clientId, $type = 1)
     {
-        return Authorizer::where('client_id', $clientId)->where('type', $type)->get();
+        return $this->model->where('client_id', $clientId)->where('type', $type)->get();
     }
 
     /**
@@ -71,7 +71,7 @@ class AuthorizerRepository extends BaseRepository
      */
     public function updateCallBackUrl($clientId, $url)
     {
-        return Authorizer::where('client_id', $clientId)->update(['call_back_url' => $url]);
+        return $this->model->where('client_id', $clientId)->update(['call_back_url' => $url]);
     }
 
     /**
@@ -82,7 +82,7 @@ class AuthorizerRepository extends BaseRepository
      */
     public function updateDel($clientId, $app_id)
     {
-        return Authorizer::where(['client_id' => $clientId, 'appid' => $app_id])->update(['client_id' => 0]);
+        return $this->model->where(['client_id' => $clientId, 'appid' => $app_id])->update(['client_id' => 0]);
     }
 
     /**
@@ -92,7 +92,7 @@ class AuthorizerRepository extends BaseRepository
      */
     public function getCallBackUrl($appId)
     {
-        $res = Authorizer::where('appid', $appId)->first(['call_back_url'])->toArray();
+        $res = $this->model->where('appid', $appId)->first(['call_back_url'])->toArray();
 
         return isset($res['call_back_url']) ? $res['call_back_url'] : '';
     }
@@ -102,11 +102,26 @@ class AuthorizerRepository extends BaseRepository
      */
     public function getAuthorizationByAppID($app_id)
     {
-        $authorizer = Authorizer::where(['appid' => $app_id])->first();
+        $authorizer = $this->model->where(['appid' => $app_id])->first();
         if ($authorizer and $authorizer->client_id) {
-            return  $authorizer;
+            return $authorizer;
         }
 
         return null;
+    }
+
+    public function getAuthorizerList($type, $client_id = null, $appid = null, $limit = 20)
+    {
+        $query = $this->model->where('type', $type)->where('client_id', '<>', 0);
+
+        if (null != $client_id) {
+            $query = $query->where('client_id', $client_id);
+        }
+
+        if (null != $appid) {
+            $query = $query->where('appid', '<>', null)->where('appid', 'like', '%'.$appid.'%');
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate($limit);
     }
 }

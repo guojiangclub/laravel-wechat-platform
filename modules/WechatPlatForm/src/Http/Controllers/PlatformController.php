@@ -84,10 +84,11 @@ class PlatformController extends Controller
     {
         $auth_code = request('auth_code');
         $authorizer = $this->platformService->saveAuthorization($auth_code);
-        // if ($clientId = request('client_id')) {
-        //            $authorizer->client_id = $clientId;
-        //            $authorizer->save();
-        //        }
+        if ($clientId = request('client_id')) {
+            $authorizer->client_id = $clientId;
+            $authorizer->save();
+        }
+
         return '授权成功！';
     }
 
