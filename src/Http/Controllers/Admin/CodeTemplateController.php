@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -14,8 +14,8 @@ namespace iBrand\Wechat\Platform\Http\Controllers\Admin;
 use Encore\Admin\Facades\Admin as LaravelAdmin;
 use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
-use iBrand\Wechat\Platform\Services\CodeTemplateService;
 use iBrand\Wechat\Platform\Repositories\ThemeRepository;
+use iBrand\Wechat\Platform\Services\CodeTemplateService;
 
 /**
  * Class CodeTemplateController.
@@ -30,8 +30,7 @@ class CodeTemplateController extends Controller
 
     public function __construct(
         CodeTemplateService $codeTemplateService, ThemeRepository $themeRepository
-    )
-    {
+    ) {
         $this->codeTemplateService = $codeTemplateService;
 
         $this->themeRepository = $themeRepository;
@@ -84,7 +83,7 @@ class CodeTemplateController extends Controller
                 ['text' => $name, 'url' => '', 'no-pjax' => 1, 'left-menu-active' => '小程序模板']
             );
 
-            $content->body(view('wechat-platform::mini.code_template.' . $view, compact('theme_list', 'draft_list', 'template_list', 'name', 'system_mini_master_template', 'system_mini_dev_template')));
+            $content->body(view('wechat-platform::mini.code_template.'.$view, compact('theme_list', 'draft_list', 'template_list', 'name', 'system_mini_master_template', 'system_mini_dev_template')));
         });
     }
 
@@ -127,7 +126,7 @@ class CodeTemplateController extends Controller
 
         $type = $input['type'];
 
-        $system_mini_template_str = 'system_mini_' . $type . '_template';
+        $system_mini_template_str = 'system_mini_'.$type.'_template';
 
         $data[$system_mini_template_str] = $input;
 

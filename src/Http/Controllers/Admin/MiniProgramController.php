@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -14,14 +14,14 @@ namespace iBrand\Wechat\Platform\Http\Controllers\Admin;
 use Encore\Admin\Facades\Admin as LaravelAdmin;
 use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
+use iBrand\Wechat\Platform\Models\CodePublish;
 use iBrand\Wechat\Platform\Repositories\CodePublishRepository;
 use iBrand\Wechat\Platform\Repositories\TesterRepository;
+use iBrand\Wechat\Platform\Repositories\ThemeTemplateRepository;
 use iBrand\Wechat\Platform\Services\CodeService;
 use iBrand\Wechat\Platform\Services\CodeTemplateService;
 use iBrand\Wechat\Platform\Services\DomainService;
 use iBrand\Wechat\Platform\Services\PlatformService;
-use iBrand\Wechat\Platform\Models\CodePublish;
-use iBrand\Wechat\Platform\Repositories\ThemeTemplateRepository;
 
 /**
  * Class MiniProgramController.
@@ -56,9 +56,7 @@ class MiniProgramController extends Controller
         CodePublishRepository $codePublishRepository,
 
         ThemeTemplateRepository $themeTemplateRepository
-
-    )
-    {
+    ) {
         $this->domainService = $domainService;
 
         $this->testerRepository = $testerRepository;
@@ -122,12 +120,12 @@ class MiniProgramController extends Controller
         $type = request('type');
 
         if (!empty($type)) {
-            $system_mini_template_str = 'system_mini_' . $type . '_template';
+            $system_mini_template_str = 'system_mini_'.$type.'_template';
 
             $system_mini_template = settings($system_mini_template_str);
 
             if (!$system_mini_template) {
-                admin_toastr('请设置系统' . request('type') . '版本', 'warning');
+                admin_toastr('请设置系统'.request('type').'版本', 'warning');
 
                 return redirect()->route('admin.mini.template.lists', ['type' => 2]);
             }
@@ -148,7 +146,6 @@ class MiniProgramController extends Controller
         //获取模板主题
         $theme = $this->themeTemplateRepository->getThemeItemByTemplateID($template_id);
 
-
         //获取体验者微信
         $testers = $this->testerRepository->getListByAppId($appid);
 
@@ -162,7 +159,6 @@ class MiniProgramController extends Controller
 
         $page = $this->codeService->getPage($appid);
 
-
         if (!$page) {
             admin_toastr('获取小程序的第三方提交代码的页面配置', 'warning');
 
@@ -171,30 +167,26 @@ class MiniProgramController extends Controller
 
         $audit = $this->codeService->getAppAuditStatus($appid);
 
-
         $status_message = '';
 
         if ($audit and count($audit) > 0) {
-
             switch ($audit->status) {
-
                 case CodePublish::AUDIT_STATUS:
 
                     $status_message = '当前有待审核版本';
 
                     break;
 
-                case  CodePublish::SUCCESS_STATUS  :
+                case  CodePublish::SUCCESS_STATUS:
 
                     $status_message = '当前有待发布版本';
                     break;
 
-                default :
+                default:
                     $audit = [];
 
                     $status_message = '';
             }
-
         }
 
         if ($status_message) {
@@ -224,16 +216,11 @@ class MiniProgramController extends Controller
      */
     public function Model()
     {
-
         $template_id = request('template_id');
 
         //获取模板主题
         $theme = $this->themeTemplateRepository->getThemeItemByTemplateID($template_id);
 
-
         return view('wechat-platform::mini.code.model', compact('theme'));
-
     }
-
-
 }

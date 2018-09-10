@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -15,9 +15,9 @@ use Carbon\Carbon;
 use Encore\Admin\Facades\Admin as LaravelAdmin;
 use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
+use iBrand\Wechat\Platform\Models\CodePublish;
 use iBrand\Wechat\Platform\Repositories\CodePublishRepository;
 use iBrand\Wechat\Platform\Services\PlatformService;
-use iBrand\Wechat\Platform\Models\CodePublish;
 
 /**
  * 小程序代码管理
@@ -33,8 +33,7 @@ class CodeController extends Controller
         PlatformService $platformService,
 
         CodePublishRepository $codePublishRepository
-    )
-    {
+    ) {
         $this->platform = $platformService;
 
         $this->codePublishRepository = $codePublishRepository;
@@ -52,7 +51,6 @@ class CodeController extends Controller
 
         $data = request()->except('_token');
 
-
         // 授权
         $server = $this->platform->getAccount($appid);
 
@@ -60,7 +58,6 @@ class CodeController extends Controller
 
         // 调用接口
         $result = $server->code->commit($data['template_id'], $data['ext_json'], $data['user_version'], $data['user_desc']);
-
 
         // 返回JSON
         return $this->admin_wechat_api($result);
@@ -146,7 +143,6 @@ class CodeController extends Controller
         $result = $server->code->submitAudit($new_data);
 
         if (isset($result['auditid'])) {
-
             $data['log']['template'] = json_encode($data['log']['template'], true);
 
             $data['log']['theme'] = $data['log']['theme'] ? json_encode($data['log']['theme'], true) : '';
@@ -170,7 +166,9 @@ class CodeController extends Controller
 
     /**
      * 撤回审核.
+     *
      * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function withdrawAudit()
@@ -202,7 +200,9 @@ class CodeController extends Controller
 
     /**
      * 发布已通过审核的小程序.
+     *
      * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function release()

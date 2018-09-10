@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -19,11 +19,8 @@ class ThemeTemplate extends Model
 
     protected $guarded = ['id'];
 
-    public function theme(){
-
-        return $this->belongsTo(Theme::class,'theme_id');
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class, 'theme_id');
     }
-
-
-
 }

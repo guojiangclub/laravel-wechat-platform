@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -19,7 +19,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
  */
 class ThemeRepository extends BaseRepository
 {
-
     public function model()
     {
         return Theme::class;
@@ -27,6 +26,7 @@ class ThemeRepository extends BaseRepository
 
     /**
      * @param int $limit
+     *
      * @return mixed
      */
     public function getAll($limit = 20)
@@ -39,19 +39,16 @@ class ThemeRepository extends BaseRepository
      */
     public function getlists()
     {
-
         return $this->model->orderBy('created_at', 'desc')->get();
     }
 
     /**
      * @param $id
+     *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Model[]|null
      */
     public function getThemeInfoBy($id)
     {
-
         return $this->model->with('items')->with('bars')->find($id);
     }
-
-
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -24,8 +24,7 @@ class BaseController extends Controller
 
     public function __construct(
         PlatformService $platformService
-    )
-    {
+    ) {
         $this->platform = $platformService;
     }
 
@@ -81,10 +80,11 @@ class BaseController extends Controller
         return $result;
     }
 
-  
     /**
-     * 微信小程序消息解密
+     * 微信小程序消息解密.
+     *
      * @return array
+     *
      * @throws \EasyWeChat\Kernel\Exceptions\DecryptException
      */
     public function decryptedData()
@@ -102,5 +102,4 @@ class BaseController extends Controller
         // 返回JSON
         return $result;
     }
-
 }

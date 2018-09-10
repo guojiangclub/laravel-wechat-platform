@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -23,7 +23,7 @@ $router->get('/oauth', 'OAuthController@oauth')->middleware(['middleware' => 'pa
 // OAuth授权结果返回
 $router->get('/', 'OAuthController@result')->name('oauth.result');
 
-$router->get('/wx6f54b9a50feda087/test',function (){
+$router->get('/wx6f54b9a50feda087/test', function () {
     return response()->json(
         ['status' => true, 'code' => 200, 'message' => '', 'data' => []]);
 });

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -10,7 +10,6 @@
  */
 
 $router->group(['prefix' => 'wechat_platform'], function ($router) {
-
     $router->post('/upload', 'UploadController@index')->name('admin.wechat.mini.upload');
 
     $router->group(['prefix' => 'customers'], function ($router) {
@@ -81,9 +80,7 @@ $router->group(['prefix' => 'wechat_platform'], function ($router) {
             $router->post('/release', 'CodeController@release')->name('admin.mini.code.release');
         });
 
-
         $router->group(['prefix' => 'theme'], function ($router) {
-
             $router->get('/api', 'ThemeController@getThemeApi')->name('admin.mini.theme.api');
 
             $router->get('/', 'ThemeController@index')->name('admin.mini.theme.index');
@@ -113,9 +110,6 @@ $router->group(['prefix' => 'wechat_platform'], function ($router) {
             $router->post('/operateThemeTemplate', 'ThemeController@operateThemeTemplate')->name('admin.mini.theme.operateThemeTemplate');
 
             $router->post('/setDefaultTheme', 'ThemeController@setDefaultTheme')->name('admin.mini.theme.setDefaultTheme');
-
-
         });
-
     });
 });

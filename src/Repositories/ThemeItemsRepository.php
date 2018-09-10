@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/wechat-platform.
+ * This file is part of ibrand/laravel-wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -19,7 +19,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
  */
 class ThemeItemsRepository extends BaseRepository
 {
-
     public function model()
     {
         return ThemeItems::class;
@@ -28,13 +27,13 @@ class ThemeItemsRepository extends BaseRepository
     /**
      * @param $theme_id
      * @param int $limit
+     *
      * @return mixed
      */
-
-    public function getAll($theme_id,$type=1, $limit = 20)
+    public function getAll($theme_id, $type = 1, $limit = 20)
     {
         return $this->model
-            ->where('theme_id',$theme_id)
+            ->where('theme_id', $theme_id)
             ->where('type', $type)
             ->where('theme_id', '<>', 0)->orderBy('created_at', 'desc')->paginate($limit);
     }
@@ -42,14 +41,14 @@ class ThemeItemsRepository extends BaseRepository
     /**
      * @param $id
      * @param $theme_id
+     *
      * @return mixed
      */
-    public function setDefaultTheme($id, $theme_id,$type=1)
+    public function setDefaultTheme($id, $theme_id, $type = 1)
     {
         $default = $this->model->where('is_default', 1)->where('theme_id', $theme_id)->where('type', $type)->first();
 
         if ($default) {
-
             $default->is_default = 0;
 
             $default->save();
@@ -60,7 +59,5 @@ class ThemeItemsRepository extends BaseRepository
         $item->is_default = 1;
 
         return $item->save();
-
     }
-
 }
