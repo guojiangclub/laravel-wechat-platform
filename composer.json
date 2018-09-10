@@ -38,5 +38,7 @@
         "iBrand\\Wechat\\Platform\\Providers\\RouteServiceProvider"
       ]
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
