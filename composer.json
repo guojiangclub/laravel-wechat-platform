@@ -16,7 +16,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "laravel/passport": "^6.0",
+    "laravel/passport": "~6.0",
     "prettus/l5-repository": "^2.6",
     "overtrue/laravel-wechat": "~4.0",
     "ibrand/backend": "~1.0"
