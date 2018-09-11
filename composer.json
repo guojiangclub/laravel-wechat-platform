@@ -20,7 +20,7 @@
     "laravel/passport": "~4.0",
     "prettus/l5-repository": "^2.6",
     "overtrue/laravel-wechat": "~4.0",
-    "ibrand/backend": "dev-master"
+    "ibrand/backend": "~1.0"
   },
   "autoload": {
     "files": [
