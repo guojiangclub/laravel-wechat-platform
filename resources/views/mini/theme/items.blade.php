@@ -103,7 +103,7 @@
 
     </div>
 </div>
-
+@include('wechat-platform::includes.common')
 <script>
     $('.delete').on('click', function () {
         var that = $(this);

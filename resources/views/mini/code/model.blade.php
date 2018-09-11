@@ -192,6 +192,7 @@ vertical-align: middle!important;">
 @stop
 
 <script src="https://cdn.bootcss.com/Sortable/1.6.0/Sortable.min.js"></script>
+@include('wechat-platform::includes.common')
 
 <script>
     custom_hide();

@@ -169,6 +169,7 @@
     </div>
 </div>
 
+@include('wechat-platform::includes.common')
 
 <div class="template_select" style="display: none;"><select id="template_select"
                                                             style="height: 35px;width: 250px;">

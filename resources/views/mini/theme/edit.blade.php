@@ -217,7 +217,7 @@
 
 
 @include('wechat-platform::mini.theme.script')
-
+@include('wechat-platform::includes.common')
 
 <script>
 

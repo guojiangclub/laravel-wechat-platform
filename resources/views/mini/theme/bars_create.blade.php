@@ -56,7 +56,7 @@
     </div>
 </div>
 
-
+@include('wechat-platform::includes.common')
 <script>
 
     $('#store').ajaxForm({

@@ -96,6 +96,7 @@
 </div>
 
 <script src="//cdn.bootcss.com/clipboard.js/1.6.1/clipboard.min.js"></script>
+@include('wechat-platform::includes.common')
 
 <script>
     var clipboard = new Clipboard('.btn');

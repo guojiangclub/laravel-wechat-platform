@@ -64,6 +64,8 @@
     </div>
 </div>
 
+@include('wechat-platform::includes.common')
+
 <script>
     $('.create').on('click', function () {
         var that = $(this);

@@ -262,7 +262,7 @@
 </div>
 
 @include('wechat-platform::mini.domain.script')
-
+@include('wechat-platform::includes.common')
 
 <script>
     var max = 4;
