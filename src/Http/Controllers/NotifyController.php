@@ -55,6 +55,11 @@ class NotifyController extends Controller
      */
     public function notifyAccount($appid)
     {
+        if($appid=='wx570bc396a51b8ff8'){
+
+            return $this->messageService->FullNetworkReleaseReceiver($appid);
+        }
+
         $authorizer = $this->authorizerRepository->getAuthorizer($appid);
 
         if (isset($authorizer->type) and 2 == $authorizer->type) {

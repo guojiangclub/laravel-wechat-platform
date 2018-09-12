@@ -353,4 +353,59 @@ class MessageService
 
         return $this->BackMessage($data);
     }
+
+    /**
+     * 全网发布
+     * @param $app_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     */
+    public function FullNetworkReleaseReceiver($app_id)
+    {
+        \Log::info('全网发布');
+        $openPlatform = $this->platformService->getAccount($app_id);
+
+        $server = $openPlatform->server;
+
+        $msg = $server->getMessage();
+
+        if ($msg['MsgType'] == 'text') {
+
+            if ($msg['Content'] == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
+                $curOfficialAccount = $openPlatform->officialAccount($app_id, cache()->get($app_id));
+
+                $curOfficialAccount->customer_service->message($msg['Content'] . '_callback')
+
+                    ->from($msg['ToUserName'])->to($msg['FromUserName'])->send();
+                die;
+
+            } elseif (strpos($msg['Content'], 'QUERY_AUTH_CODE') == 0) {
+
+                $code = substr($msg['Content'], 16);
+
+                $authorizerInfo = $openPlatform->handleAuthorize($code)['authorization_info'];
+
+                cache()->put($authorizerInfo['authorizer_appid'], $authorizerInfo['authorizer_refresh_token'], 5);
+
+                $curOfficialAccount = $openPlatform->officialAccount(
+                    $app_id,
+                    cache()->get($app_id)
+                );
+                $curOfficialAccount->customer_service->message($code . "_from_api")
+                    ->from($msg['ToUserName'])->to($msg['FromUserName'])->send();
+            }
+
+
+        } elseif ($msg['MsgType'] == 'event') {
+            $curOfficialAccount = $openPlatform->officialAccount($app_id, cache()->get($app_id));
+            $curOfficialAccount->customer_service->message($msg['Event'] . 'from_callback')
+                ->to($msg['FromUserName'])->from($msg['ToUserName'])->send();
+            die;
+        }
+
+        return $openPlatform->server->serve();
+    }
 }
