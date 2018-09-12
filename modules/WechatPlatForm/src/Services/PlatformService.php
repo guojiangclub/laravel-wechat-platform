@@ -183,6 +183,12 @@ class PlatformService
      */
     public function getAccount($appId, $type = 'miniProgram')
     {
+
+        if($appId=='wx570bc396a51b8ff8'){
+
+            return $this->server;
+        }
+
         //获取token
         $authorizer = $this->authorizerRepository->getAuthorizationByAppID($appId);
 

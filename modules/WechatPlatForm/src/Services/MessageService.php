@@ -45,7 +45,8 @@ class MessageService
         PlatformService $platformService,
 
         CodePublishRepository $codePublishRepository
-    ) {
+    )
+    {
         $this->authorizerRepository = $authorizerRepository;
 
         $this->platformService = $platformService;
@@ -191,7 +192,7 @@ class MessageService
                     'content' => $message['Content'],
                 ];
 
-                $data = $this->BackCurl($url.'/wechat_call_back/message', $method = self::GET, $params);
+                $data = $this->BackCurl($url . '/wechat_call_back/message', $method = self::GET, $params);
 
                 return $this->BackMessage($data);
             }
@@ -202,34 +203,23 @@ class MessageService
         return $server->server->serve();
     }
 
-    public function miniProgramProcess($appid)
+    /**
+     * 事件处理.
+     *
+     * @param $url
+     * @param $data
+     *
+     * @return string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     */
+    public function callBackEvent($url, $data)
     {
-        //授权
-        $server = $this->platformService->miniProgramAPI($appid);
+        $data = $this->BackCurl($url . '/wechat_call_back/event', $method = self::GET, $data);
+        \Log::info($data);
 
-        $server->server->push(function ($message) use ($appid) {
-            \Log::info($message);
-
-            //event事件
-            if ('event' == $message['MsgType']) {
-                switch ($message['Event']) {
-                    //小程序获取审核结果事件
-                    case 'weapp_audit_success':
-
-                        $audit = $this->codePublishRepository->getAuditByAppID($appid);
-
-                        $status = isset($message['Reason']) ? 1 : 0;
-
-                        $reason = isset($message['Reason']) ? $message['Reason'] : '';
-
-                        $this->codePublishRepository->renew($audit, $status, $reason = '');
-                }
-            }
-
-            return '';
-        });
-
-        return $server->server->serve();
+        return $this->BackMessage($data);
     }
 
     /**
@@ -237,8 +227,8 @@ class MessageService
      *
      * @param $url
      * @param string $method
-     * @param array  $params
-     * @param array  $request_header
+     * @param array $params
+     * @param array $request_header
      *
      * @return mixed
      */
@@ -246,7 +236,7 @@ class MessageService
     {
         $request_header = ['Content-Type' => 'application/x-www-form-urlencoded'];
         if (self::GET === $method || self::DELETE === $method) {
-            $url .= (stripos($url, '?') ? '&' : '?').http_build_query($params);
+            $url .= (stripos($url, '?') ? '&' : '?') . http_build_query($params);
             $params = [];
         }
         $ch = curl_init();
@@ -335,22 +325,89 @@ class MessageService
         return '';
     }
 
+    public function miniProgramProcess($appid)
+    {
+        //授权
+        $server = $this->platformService->miniProgramAPI($appid);
+
+        $server->server->push(function ($message) use ($appid) {
+            \Log::info($message);
+
+            //event事件
+            if ('event' == $message['MsgType']) {
+                switch ($message['Event']) {
+                    //小程序获取审核结果事件
+                    case 'weapp_audit_success':
+
+                        $audit = $this->codePublishRepository->getAuditByAppID($appid);
+
+                        $status = isset($message['Reason']) ? 1 : 0;
+
+                        $reason = isset($message['Reason']) ? $message['Reason'] : '';
+
+                        $this->codePublishRepository->renew($audit, $status, $reason = '');
+                }
+            }
+
+            return '';
+        });
+
+        return $server->server->serve();
+    }
+
+
     /**
-     * 事件处理.
-     *
-     * @param $url
-     * @param $data
-     *
-     * @return string
-     *
+     * 全网发布
+     * @param $app_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      */
-    public function callBackEvent($url, $data)
+    public function FullNetworkReleaseReceiver($app_id)
     {
-        $data = $this->BackCurl($url.'/wechat_call_back/event', $method = self::GET, $data);
-        \Log::info($data);
+        \Log::info('全网发布');
+        $openPlatform = $this->platformService->getAccount($app_id);
 
-        return $this->BackMessage($data);
+        $server = $openPlatform->server;
+
+        $msg = $server->getMessage();
+
+        if ($msg['MsgType'] == 'text') {
+
+            if ($msg['Content'] == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
+                $curOfficialAccount = $openPlatform->officialAccount($app_id, cache()->get($app_id));
+
+                $curOfficialAccount->customer_service->message($msg['Content'] . '_callback')
+
+                    ->from($msg['ToUserName'])->to($msg['FromUserName'])->send();
+                die;
+
+            } elseif (strpos($msg['Content'], 'QUERY_AUTH_CODE') == 0) {
+
+                $code = substr($msg['Content'], 16);
+
+                $authorizerInfo = $openPlatform->handleAuthorize($code)['authorization_info'];
+
+                cache()->put($authorizerInfo['authorizer_appid'], $authorizerInfo['authorizer_refresh_token'], 5);
+
+                $curOfficialAccount = $openPlatform->officialAccount(
+                    $app_id,
+                    cache()->get($app_id)
+                );
+                $curOfficialAccount->customer_service->message($code . "_from_api")
+                    ->from($msg['ToUserName'])->to($msg['FromUserName'])->send();
+            }
+
+
+        } elseif ($msg['MsgType'] == 'event') {
+            $curOfficialAccount = $openPlatform->officialAccount($app_id, cache()->get($app_id));
+            $curOfficialAccount->customer_service->message($msg['Event'] . 'from_callback')
+                ->to($msg['FromUserName'])->from($msg['ToUserName'])->send();
+            die;
+        }
+
+        return $openPlatform->server->serve();
     }
 }
