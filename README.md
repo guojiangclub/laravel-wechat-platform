@@ -72,6 +72,14 @@ WECHAT_OPEN_PLATFORM_AES_KEY=           //消息加解密Key
 
 ```
 
+后台地址
+
+```
+域名/admin 
+
+用户名: admin 密码: admin
+```
+
 接口文档整理中。
 
 
