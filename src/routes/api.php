@@ -244,8 +244,8 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->post('/delete', 'CardController@delete');
         //获取卡券颜色
         $router->get('/colors', 'CardController@getColors');
-        //获取会员信息
-        $router->post('/membership/get', 'CardController@setTestWhitelist');
+//        //获取会员信息
+//        $router->post('/membership/get', 'CardController@setTestWhitelist');
         //设置测试白名单
         $router->post('/setTestWhitelist', 'CardController@setTestWhitelist');
         //创建二维码
