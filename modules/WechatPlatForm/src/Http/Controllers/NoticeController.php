@@ -187,6 +187,7 @@ class NoticeController extends Controller
         $error = [];
 
         $i = 0;
+
         if (isset($data['touser']) && is_array($data['touser'])) {
             if (count($data['touser']) > 100) {
                 return false;
@@ -196,8 +197,14 @@ class NoticeController extends Controller
                 $data['touser'] = $item;
                 // 调用接口
                 try {
-                    $server->template_message->send($data);
-                    ++$i;
+                    $res=$server->template_message->send($data);
+
+                    if(isset($res['errcode'])&&$res['errcode']==0){
+                        ++$i;
+                    }else{
+                        $error[] = $data['touser'];
+                    }
+
                 } catch (\Exception $e) {
                     $error[] = $data['touser'];
                 }

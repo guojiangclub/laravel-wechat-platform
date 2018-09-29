@@ -95,7 +95,7 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //获取所有模板列表
         $router->get('/get', 'NoticeController@getTemplateAll');
         //发送模板消息
-        $router->get('/send', 'NoticeController@send');
+        $router->any('/send', 'NoticeController@send');
         //多用户发送模板消息
         $router->post('/sendall', 'NoticeController@sendAll');
         //添加模板
@@ -245,8 +245,8 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->post('/delete', 'CardController@delete');
         //获取卡券颜色
         $router->get('/colors', 'CardController@getColors');
-        //获取会员信息
-        $router->post('/membership/get', 'CardController@setTestWhitelist');
+//        //获取会员信息
+//        $router->post('/membership/get', 'CardController@setTestWhitelist');
         //设置测试白名单
         $router->post('/setTestWhitelist', 'CardController@setTestWhitelist');
         //创建二维码
