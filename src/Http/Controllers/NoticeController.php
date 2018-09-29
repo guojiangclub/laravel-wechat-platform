@@ -196,8 +196,14 @@ class NoticeController extends Controller
                 $data['touser'] = $item;
                 // 调用接口
                 try {
-                    $server->template_message->send($data);
-                    ++$i;
+                    $res=$server->template_message->send($data);
+
+                    if(isset($res['errcode'])&&$res['errcode']==0){
+                        ++$i;
+                    }else{
+                        $error[] = $data['touser'];
+                    }
+
                 } catch (\Exception $e) {
                     $error[] = $data['touser'];
                 }

@@ -94,7 +94,7 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //获取所有模板列表
         $router->get('/get', 'NoticeController@getTemplateAll');
         //发送模板消息
-        $router->get('/send', 'NoticeController@send');
+        $router->any('/send', 'NoticeController@send');
         //多用户发送模板消息
         $router->post('/sendall', 'NoticeController@sendAll');
         //添加模板
