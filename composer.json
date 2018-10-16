@@ -16,11 +16,12 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "paragonie/random_compat":"~2.0",
-    "laravel/passport": "~4.0",
+    "laravel/passport": "^4.0",
     "prettus/l5-repository": "^2.6",
     "overtrue/laravel-wechat": "~4.0",
-    "ibrand/backend": "~1.0"
+    "ibrand/backend": "dev-master",
+    "ibrand/setting": "^1.0",
+    "wikimedia/composer-merge-plugin": "^1.4"
   },
   "autoload": {
     "files": [
@@ -37,7 +38,5 @@
         "iBrand\\Wechat\\Platform\\Providers\\RouteServiceProvider"
       ]
     }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }
