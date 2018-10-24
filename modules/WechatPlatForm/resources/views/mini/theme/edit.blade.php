@@ -48,20 +48,17 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label text-right">*封面图</label>
 
-                    <div class="col-sm-8">
+                    <div class="col-sm-4">
 
                         <div id="upload-img"  class="pull-left col-sm-4">
                             <span id="imguping"  data-style="expand-right"  class="but ladda-button " type="submit" disabled ><span id="scspan">上传封面</span></span>
                         </div>
 
-                        <img style="margin-left: -180px;"  id="img-img" width="150" height="180" src="{{$item->img}}" alt="">
+                        <img id="img-img" width="150" height="180" src="{{$item->img}}" alt="">
 
                         <input type="hidden" id="img" class="form-control taginput" name="img" placeholder="" value="{{$item->img}}" />
 
-
-
                     </div>
-
 
                 </div>
 
@@ -183,6 +180,8 @@
 
             <input type="hidden" name="_token" value="{{csrf_token()}}">
 
+            <input type="hidden" name="type" value="{{request('type')?request('type'):1}}">
+
             <div class="panel-body">
 
                 <div class="hr-line-dashed"></div>
@@ -210,7 +209,6 @@
     })
     $(function () {
         $('.color').colorpicker();
-
     });
 
 </script>
@@ -229,6 +227,7 @@
         if (len < max) {
             div.append(str);
         }
+        $('.color').colorpicker();
         return;
     }
 

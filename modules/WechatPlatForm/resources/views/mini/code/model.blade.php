@@ -32,7 +32,7 @@
             <table class="table-responsive">
                 <table class="table table-striped">
                     <tbody>
-                    @if(isset($theme->theme->items) AND count($theme->theme->items)>0)
+
                         <tr>
                             <td class="col-sm-4" style="text-align: center;
 vertical-align: middle!important;">
@@ -44,39 +44,40 @@ vertical-align: middle!important;">
 
                                     <option id="them_0" value=0>请选择配色主题</option>
 
-                                    <option value=-1>自定义</option>
-
-                                    @foreach($theme->theme->items as $k=> $item)
-
-                                        <script>
-
-                                            theme["{{$item->id}}"] = {
-                                                'id': "{{$item->id}}",
-                                                'title': "{{$item->title}}",
-                                                'theme_id': "{{$item->theme_id}}",
-                                                'img': "{{$item->img}}",
-                                                'param': "{{$item->param}}"
-                                            }
-                                        </script>
-
-                                        <option value="{{$item->id}}" data-img="{{$item->img}}"
-
-                                                @if($item->is_default) selected @endif
-
-                                        >{{$item->title}}</option>
-
-
-                                        @if($item->is_default)
+                                    {{--<option value=-1>自定义</option>--}}
+                                    @if(isset($theme->theme->items) AND count($theme->theme->items)>0)
+                                        @foreach($theme->theme->items as $k=> $item)
                                             <script>
-                                                img("{{$item->img}}", "{{$item->id}}")
-                                                CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
-                                                $('#theme-no').show();
-                                                $('#theme-no span').text(theme["{{$item->id}}"]['title']);
-                                                $('#theme-no-img').show();
-                                                $('#theme-no-img').attr('src', theme["{{$item->id}}"]['img']);
-                                            </script> @endif
 
-                                    @endforeach
+                                                theme["{{$item->id}}"] = {
+                                                    'id': "{{$item->id}}",
+                                                    'title': "{{$item->title}}",
+                                                    'theme_id': "{{$item->theme_id}}",
+                                                    'img': "{{$item->img}}",
+                                                    'param': "{{$item->param}}"
+                                                }
+                                            </script>
+
+                                            <option value="{{$item->id}}" data-img="{{$item->img}}"
+
+                                                    @if($item->is_default) selected @endif
+
+                                            >{{$item->title}}</option>
+
+
+                                            @if($item->is_default)
+                                                <script>
+                                                    img("{{$item->img}}", "{{$item->id}}")
+                                                    CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
+                                                    CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
+                                                    $('#theme-no').show();
+                                                    $('#theme-no span').text(theme["{{$item->id}}"]['title']);
+                                                    $('#theme-no-img').show();
+                                                    $('#theme-no-img').attr('src', theme["{{$item->id}}"]['img']);
+                                                </script> @endif
+
+                                        @endforeach
+                                    @endif
                                 </select>
                             </td>
                             <td class="col-sm-2">
@@ -84,7 +85,7 @@ vertical-align: middle!important;">
                             </td>
                         </tr>
 
-                    @endif
+
 
                     <tr class="custom">
                         <td class="col-sm-4" style="text-align: center;
@@ -118,7 +119,7 @@ vertical-align: middle!important;">
                     </tr>
 
 
-                    @if(isset($theme->theme->bars) AND count($theme->theme->bars)>0)
+
                         <tr>
                             <td class="col-sm-4" style="text-align: center;
 vertical-align: middle!important;">
@@ -129,32 +130,34 @@ vertical-align: middle!important;">
                                 <select name="" id="select_bars_box" class="form-control">
 
                                     <option id="them_bars_0" value=0>请选择菜单主题</option>
+                                @if(isset($theme->theme->bars) AND count($theme->theme->bars)>0)
 
-                                    @foreach($theme->theme->bars as $k=> $item)
+                                        @foreach($theme->theme->bars as $k=> $item)
 
-                                        <script>
-
-                                            bars["{{$item->id}}"] = {
-                                                'id': "{{$item->id}}",
-                                                'title': "{{$item->title}}",
-                                                'theme_id': "{{$item->theme_id}}",
-                                                'param': "{{$item->param}}"
-                                            }
-                                        </script>
-
-                                        <option value="{{$item->id}}"
-
-                                                @if($item->is_default) selected @endif
-
-                                        >{{$item->title}}</option>
-
-
-                                        @if($item->is_default)
                                             <script>
-                                                bars("{{$item->id}}")
-                                                CommitMiniCodeExamine_data.log.bars = bars["{{$item->id}}"];
-                                            </script> @endif
-                                    @endforeach
+                                                bars["{{$item->id}}"] = {
+                                                    'id': "{{$item->id}}",
+                                                    'title': "{{$item->title}}",
+                                                    'theme_id': "{{$item->theme_id}}",
+                                                    'param': "{{$item->param}}"
+                                                }
+                                            </script>
+
+                                            <option value="{{$item->id}}"
+
+                                                    @if($item->is_default) selected @endif
+
+                                            >{{$item->title}}</option>
+
+
+                                            @if($item->is_default)
+                                                <script>
+                                                    bars("{{$item->id}}")
+                                                    CommitMiniCodeExamine_data.log.bars = bars["{{$item->id}}"];
+                                                </script> @endif
+                                        @endforeach
+
+                                    @endif
 
                                 </select>
                             </td>
@@ -170,7 +173,7 @@ vertical-align: middle!important;">
                             </td>
                         </tr>
 
-                    @endif
+
 
 
                     </tbody>
@@ -195,7 +198,6 @@ vertical-align: middle!important;">
 
 <script>
     custom_hide();
-
     $('#select_box').change(function (e) {
         var val = $(this).val();
         if (val >0) {
@@ -204,6 +206,7 @@ vertical-align: middle!important;">
             theme[val]['param'] = param
             $('#img_theme').attr('src', img);
             CommitMiniCode_data.ext_json.ext = JSON.parse(param);
+            CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
             CommitMiniCodeExamine_data.log.theme = theme[val];
             $('#theme-no').show();
             $('#theme-no span').text(theme[val]['title']);
@@ -216,7 +219,9 @@ vertical-align: middle!important;">
             $('#theme-no span').text('');
             $('#theme-no-img').hide();
             $('#theme-no-img').attr('src', '');
-
+            //新代码
+            $('#img_theme').attr('src', '');
+            //
             CommitMiniCodeExamine_data.log.theme = "";
             delete CommitMiniCode_data.ext_json.ext;
             custom_hide();
@@ -229,9 +234,6 @@ vertical-align: middle!important;">
             CommitMiniCodeExamine_data.log.theme = "";
             delete CommitMiniCode_data.ext_json.ext;
         }
-
-
-
 
     })
 
@@ -302,17 +304,40 @@ vertical-align: middle!important;">
 
 
     function Submission() {
-
         var val=$('#select_box').val();
-        if(val==-1){
-            CommitMiniCode_data.ext_json.window = {};
-            CommitMiniCode_data.ext_json.window.navigationBarBackgroundColor = $('#navigationBarBackgroundColor').val();
-            CommitMiniCode_data.ext_json.window.navigationBarTextStyle = $('#navigationBarTextStyle').val();
-        }else{
+
+        if(val==0){
+            swal({
+                title: "请选择配色主题",
+                text:'',
+                type: "error"
+            });
+            return
+        }
+
+        // if(val==-1){
+        //     CommitMiniCode_data.ext_json.window = {};
+        //     CommitMiniCode_data.ext_json.window.navigationBarBackgroundColor = $('#navigationBarBackgroundColor').val();
+        //     CommitMiniCode_data.ext_json.window.navigationBarTextStyle = $('#navigationBarTextStyle').val();
+        // }else{
+        //     delete  CommitMiniCode_data.ext_json.window;
+        // }
+
+        CommitMiniCode_data.ext_json.window = {};
+
+        if('navigationBarBackgroundColor' in CommitMiniCode_data.ext_json.ext){
+            CommitMiniCode_data.ext_json.window.navigationBarBackgroundColor = CommitMiniCode_data.ext_json.ext.navigationBarBackgroundColor;
+        }
+
+        if('navigationBarTextStyle' in CommitMiniCode_data.ext_json.ext){
+            CommitMiniCode_data.ext_json.window.navigationBarTextStyle = CommitMiniCode_data.ext_json.ext.navigationBarTextStyle;
+        }
+
+        if(!'navigationBarTextStyle' in CommitMiniCode_data.ext_json.ext &&'navigationBarBackgroundColor' in CommitMiniCode_data.ext_json.ext){
             delete  CommitMiniCode_data.ext_json.window;
         }
 
-        if(!CommitMiniCode_data.ext_json.tabBar === undefined ){
+        if(CommitMiniCode_data.ext_json.tabBar){
 
             var bar = JSON.parse(CommitMiniCode_data.ext_json.tabBar);
 
@@ -326,9 +351,10 @@ vertical-align: middle!important;">
                 });
                 return
             }
-
             CommitMiniCode_data.ext_json.tabBar = bar
         }
+
+        console.log(CommitMiniCode_data);
 
         $.post(CommitMiniCode_url, CommitMiniCode_data, function (result) {
 

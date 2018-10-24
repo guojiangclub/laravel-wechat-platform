@@ -21,7 +21,7 @@
             </a>
         </li>
 
-        <a href="{{route('admin.mini.theme.item.create',['theme_id'=>request('theme_id'),'name'=>request('name'),'type'=>request('type')])}}" class="btn btn-w-m btn-info pull-right">添加</a>
+        <a href="{{route('admin.mini.theme.item.create',['theme_id'=>request('theme_id'),'name'=>request('name'),'type'=>$type])}}" class="btn btn-w-m btn-info pull-right">添加</a>
     </ul>
     <div class="tab-content">
         <div id="tab-1" class="tab-pane active">
@@ -58,13 +58,13 @@
                                 <td>
 
                                     <a class="btn btn-xs btn-info add"
-                                       href="{{route('admin.mini.theme.item.edit',['name'=>request('name'),'theme_id'=>request('theme_id'),'id'=>$item->id,'type'=>request('type')])}}">
+                                       href="{{route('admin.mini.theme.item.edit',['name'=>request('name'),'theme_id'=>request('theme_id'),'id'=>$item->id,'type'=>$type])}}">
                                         <i data-toggle="tooltip" data-placement="top"
                                            class="fa fa-edit"
                                            title="编辑"></i></a>
 
                                     <a class="btn btn-xs btn-info set"
-                                       data-href="{{route('admin.mini.theme.setDefaultTheme',['theme_id'=>request('theme_id'),'id'=>$item->id,'type'=>request('type')])}}">
+                                       data-href="{{route('admin.mini.theme.setDefaultTheme',['theme_id'=>request('theme_id'),'id'=>$item->id,'type'=>$type])}}">
                                         <i data-toggle="tooltip" data-placement="top"
                                            class="fa fa-asterisk"
                                            title="设置成默认"></i></a>
