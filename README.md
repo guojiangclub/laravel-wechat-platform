@@ -72,6 +72,39 @@ WECHAT_OPEN_PLATFORM_TOKEN=             //消息校验Token
 WECHAT_OPEN_PLATFORM_AES_KEY=           //消息加解密Key
 
 ```
+CSRF验证中排除的URI
+找到App\Http\Middleware\VerifyCsrfToken中except属性数组中添加一条
+
+```
+ "/oauth/token"
+```
+
+添加routeMiddleware
+找到App\Http\Kernel中routeMiddleware属性数组中添加
+
+```
+'client' => \iBrand\Wechat\Platform\Http\Middleware\ClientVerify::class,
+'parameter' => \iBrand\Wechat\Platform\Http\Middleware\ParameterVerify::class,
+
+```
+
+修改config\auth.php文件
+guards数组添加
+```
+ 'clients' => [
+            'driver' => 'passport',
+            'provider' => 'clients',
+],
+
+```
+providers数组添加
+```
+'clients' => [
+            'driver' => 'eloquent',
+            'model' =>iBrand\Wechat\Platform\Models\Clients::class,
+],
+
+```
 
 后台地址
 

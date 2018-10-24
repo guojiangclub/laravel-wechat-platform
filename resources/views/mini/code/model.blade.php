@@ -32,22 +32,21 @@
             <table class="table-responsive">
                 <table class="table table-striped">
                     <tbody>
-                    @if(isset($theme->theme->items) AND count($theme->theme->items)>0)
-                        <tr>
-                            <td class="col-sm-4" style="text-align: center;
+
+                    <tr>
+                        <td class="col-sm-4" style="text-align: center;
 vertical-align: middle!important;">
-                                配色主题
-                            </td>
-                            <td class="col-sm-6" style="text-align: center;
+                            配色主题
+                        </td>
+                        <td class="col-sm-6" style="text-align: center;
 vertical-align: middle!important;">
-                                <select name="" id="select_box" class="form-control">
+                            <select name="" id="select_box" class="form-control">
 
-                                    <option id="them_0" value=0>请选择配色主题</option>
+                                <option id="them_0" value=0>请选择配色主题</option>
 
-                                    <option value=-1>自定义</option>
-
+                                {{--<option value=-1>自定义</option>--}}
+                                @if(isset($theme->theme->items) AND count($theme->theme->items)>0)
                                     @foreach($theme->theme->items as $k=> $item)
-
                                         <script>
 
                                             theme["{{$item->id}}"] = {
@@ -70,6 +69,7 @@ vertical-align: middle!important;">
                                             <script>
                                                 img("{{$item->img}}", "{{$item->id}}")
                                                 CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
+                                                CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
                                                 $('#theme-no').show();
                                                 $('#theme-no span').text(theme["{{$item->id}}"]['title']);
                                                 $('#theme-no-img').show();
@@ -77,14 +77,15 @@ vertical-align: middle!important;">
                                             </script> @endif
 
                                     @endforeach
-                                </select>
-                            </td>
-                            <td class="col-sm-2">
-                                <img class="pull-right" id="img_theme" src="" width="150" height="180" alt="">
-                            </td>
-                        </tr>
+                                @endif
+                            </select>
+                        </td>
+                        <td class="col-sm-2">
+                            <img class="pull-right" id="img_theme" src="" width="150" height="180" alt="">
+                        </td>
+                    </tr>
 
-                    @endif
+
 
                     <tr class="custom">
                         <td class="col-sm-4" style="text-align: center;
@@ -118,22 +119,22 @@ vertical-align: middle!important;">
                     </tr>
 
 
-                    @if(isset($theme->theme->bars) AND count($theme->theme->bars)>0)
-                        <tr>
-                            <td class="col-sm-4" style="text-align: center;
-vertical-align: middle!important;">
-                                菜单主题
-                            </td>
-                            <td class="col-sm-6" style="text-align: center;
-vertical-align: middle!important;">
-                                <select name="" id="select_bars_box" class="form-control">
 
-                                    <option id="them_bars_0" value=0>请选择菜单主题</option>
+                    <tr>
+                        <td class="col-sm-4" style="text-align: center;
+vertical-align: middle!important;">
+                            菜单主题
+                        </td>
+                        <td class="col-sm-6" style="text-align: center;
+vertical-align: middle!important;">
+                            <select name="" id="select_bars_box" class="form-control">
+
+                                <option id="them_bars_0" value=0>请选择菜单主题</option>
+                                @if(isset($theme->theme->bars) AND count($theme->theme->bars)>0)
 
                                     @foreach($theme->theme->bars as $k=> $item)
 
                                         <script>
-
                                             bars["{{$item->id}}"] = {
                                                 'id': "{{$item->id}}",
                                                 'title': "{{$item->title}}",
@@ -156,21 +157,23 @@ vertical-align: middle!important;">
                                             </script> @endif
                                     @endforeach
 
-                                </select>
-                            </td>
+                                @endif
 
-                        </tr>
+                            </select>
+                        </td>
 
-                        <tr>
-                            <td class="bar">注意：菜单至少2个，可拖拽排序，可修改文案</td>
-                            <td>
-                                <ul id="bar">
+                    </tr>
 
-                                </ul>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="bar">注意：菜单至少2个，可拖拽排序，可修改文案</td>
+                        <td>
+                            <ul id="bar">
 
-                    @endif
+                            </ul>
+                        </td>
+                    </tr>
+
+
 
 
                     </tbody>
@@ -192,11 +195,9 @@ vertical-align: middle!important;">
 @stop
 
 <script src="https://cdn.bootcss.com/Sortable/1.6.0/Sortable.min.js"></script>
-@include('wechat-platform::includes.common')
 
 <script>
     custom_hide();
-
     $('#select_box').change(function (e) {
         var val = $(this).val();
         if (val >0) {
@@ -205,6 +206,7 @@ vertical-align: middle!important;">
             theme[val]['param'] = param
             $('#img_theme').attr('src', img);
             CommitMiniCode_data.ext_json.ext = JSON.parse(param);
+            CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
             CommitMiniCodeExamine_data.log.theme = theme[val];
             $('#theme-no').show();
             $('#theme-no span').text(theme[val]['title']);
@@ -217,7 +219,9 @@ vertical-align: middle!important;">
             $('#theme-no span').text('');
             $('#theme-no-img').hide();
             $('#theme-no-img').attr('src', '');
-
+            //新代码
+            $('#img_theme').attr('src', '');
+            //
             CommitMiniCodeExamine_data.log.theme = "";
             delete CommitMiniCode_data.ext_json.ext;
             custom_hide();
@@ -230,9 +234,6 @@ vertical-align: middle!important;">
             CommitMiniCodeExamine_data.log.theme = "";
             delete CommitMiniCode_data.ext_json.ext;
         }
-
-
-
 
     })
 
@@ -303,17 +304,40 @@ vertical-align: middle!important;">
 
 
     function Submission() {
-
         var val=$('#select_box').val();
-        if(val==-1){
-            CommitMiniCode_data.ext_json.window = {};
-            CommitMiniCode_data.ext_json.window.navigationBarBackgroundColor = $('#navigationBarBackgroundColor').val();
-            CommitMiniCode_data.ext_json.window.navigationBarTextStyle = $('#navigationBarTextStyle').val();
-        }else{
+
+        if(val==0){
+            swal({
+                title: "请选择配色主题",
+                text:'',
+                type: "error"
+            });
+            return
+        }
+
+        // if(val==-1){
+        //     CommitMiniCode_data.ext_json.window = {};
+        //     CommitMiniCode_data.ext_json.window.navigationBarBackgroundColor = $('#navigationBarBackgroundColor').val();
+        //     CommitMiniCode_data.ext_json.window.navigationBarTextStyle = $('#navigationBarTextStyle').val();
+        // }else{
+        //     delete  CommitMiniCode_data.ext_json.window;
+        // }
+
+        CommitMiniCode_data.ext_json.window = {};
+
+        if('navigationBarBackgroundColor' in CommitMiniCode_data.ext_json.ext){
+            CommitMiniCode_data.ext_json.window.navigationBarBackgroundColor = CommitMiniCode_data.ext_json.ext.navigationBarBackgroundColor;
+        }
+
+        if('navigationBarTextStyle' in CommitMiniCode_data.ext_json.ext){
+            CommitMiniCode_data.ext_json.window.navigationBarTextStyle = CommitMiniCode_data.ext_json.ext.navigationBarTextStyle;
+        }
+
+        if(!'navigationBarTextStyle' in CommitMiniCode_data.ext_json.ext &&'navigationBarBackgroundColor' in CommitMiniCode_data.ext_json.ext){
             delete  CommitMiniCode_data.ext_json.window;
         }
 
-        if(!CommitMiniCode_data.ext_json.tabBar === undefined ){
+        if(CommitMiniCode_data.ext_json.tabBar){
 
             var bar = JSON.parse(CommitMiniCode_data.ext_json.tabBar);
 
@@ -327,9 +351,10 @@ vertical-align: middle!important;">
                 });
                 return
             }
-
             CommitMiniCode_data.ext_json.tabBar = bar
         }
+
+        console.log(CommitMiniCode_data);
 
         $.post(CommitMiniCode_url, CommitMiniCode_data, function (result) {
 

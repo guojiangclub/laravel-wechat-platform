@@ -56,6 +56,12 @@ class CodeController extends Controller
 
         $data['ext_json'] = json_encode($data['ext_json'], true);
 
+        if(isset($data['ext_json']['tabBar']['list'][0]['pagePath'])){
+
+            $data['ext_json']['ext']['firstPagePath']=$data['ext_json']['tabBar']['list'][0]['pagePath'];
+
+        }
+
         // 调用接口
         $result = $server->code->commit($data['template_id'], $data['ext_json'], $data['user_version'], $data['user_desc']);
 
@@ -145,9 +151,9 @@ class CodeController extends Controller
         if (isset($result['auditid'])) {
             $data['log']['template'] = json_encode($data['log']['template'], true);
 
-            $data['log']['theme'] = $data['log']['theme'] ? json_encode($data['log']['theme'], true) : '';
+            $data['log']['theme'] = isset($data['log']['theme']) ? json_encode($data['log']['theme'], true) : '';
 
-            $data['log']['bars'] = $data['log']['bars'] ? json_encode($data['log']['bars'], true) : '';
+            $data['log']['bars'] = isset($data['log']['bars']) ? json_encode($data['log']['bars'], true) : '';
 
             $data['log']['ext_json'] = json_encode($data['log']['ext_json'], true);
 

@@ -176,7 +176,7 @@ class ThemeController extends Controller
                 ['text' => '主题详情列表', 'url' => '', 'no-pjax' => 1, 'left-menu-active' => '小程序主题']
             );
 
-            $content->body(view($view, compact('lists', 'name')));
+            $content->body(view($view, compact('lists', 'name','type')));
         });
     }
 
@@ -290,13 +290,15 @@ class ThemeController extends Controller
     {
         $theme_id = request('theme_id');
 
+        $type=request('type');
+
         $view = 'wechat-platform::mini.theme.create';
 
         if (2 == request('type')) {
             $view = 'wechat-platform::mini.theme.bars_create';
         }
 
-        return LaravelAdmin::content(function (Content $content) use ($theme_id, $view) {
+        return LaravelAdmin::content(function (Content $content) use ($theme_id,$view,$type) {
             $content->header('添加主题');
 
             $content->breadcrumb(
@@ -306,7 +308,7 @@ class ThemeController extends Controller
                 ['text' => '添加主题', 'url' => '', 'no-pjax' => 1, 'left-menu-active' => '小程序主题']
             );
 
-            $content->body(view($view, compact('theme_id')));
+            $content->body(view($view, compact('theme_id','type')));
         });
     }
 

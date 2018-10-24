@@ -35,7 +35,7 @@
 
                     <div class="col-sm-8">
 
-                            <input type="text" class="form-control taginput" name="title" placeholder="" value="{{$item->title}}" />
+                        <input type="text" class="form-control taginput" name="title" placeholder="" value="{{$item->title}}" />
 
                     </div>
 
@@ -48,20 +48,17 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label text-right">*封面图</label>
 
-                    <div class="col-sm-8">
+                    <div class="col-sm-4">
 
                         <div id="upload-img"  class="pull-left col-sm-4">
                             <span id="imguping"  data-style="expand-right"  class="but ladda-button " type="submit" disabled ><span id="scspan">上传封面</span></span>
                         </div>
 
-                        <img style="margin-left: -180px;"  id="img-img" width="150" height="180" src="{{$item->img}}" alt="">
+                        <img id="img-img" width="150" height="180" src="{{$item->img}}" alt="">
 
                         <input type="hidden" id="img" class="form-control taginput" name="img" placeholder="" value="{{$item->img}}" />
 
-
-
                     </div>
-
 
                 </div>
 
@@ -143,7 +140,7 @@
                                         <div class="col-sm-1">
                                             <div class="input-group colorpicker-component color"
                                                  @if(is_color($v))
-                                                  data-color="{{$v}}"
+                                                 data-color="{{$v}}"
                                                  @else
                                                  data-color="#000000"
                                                  @endif
@@ -154,7 +151,7 @@
                                                        value="{{$v}}"
                                                        @else
                                                        value="#000000"
-                                                       @endif
+                                                        @endif
 
                                                 />
                                                 <span class="input-group-addon color-box"><i></i></span>
@@ -183,6 +180,8 @@
 
             <input type="hidden" name="_token" value="{{csrf_token()}}">
 
+            <input type="hidden" name="type" value="{{request('type')?request('type'):1}}">
+
             <div class="panel-body">
 
                 <div class="hr-line-dashed"></div>
@@ -210,14 +209,13 @@
     })
     $(function () {
         $('.color').colorpicker();
-
     });
 
 </script>
 
 
 @include('wechat-platform::mini.theme.script')
-@include('wechat-platform::includes.common')
+
 
 <script>
 
@@ -229,6 +227,7 @@
         if (len < max) {
             div.append(str);
         }
+        $('.color').colorpicker();
         return;
     }
 
