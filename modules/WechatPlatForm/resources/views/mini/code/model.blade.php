@@ -33,57 +33,57 @@
                 <table class="table table-striped">
                     <tbody>
 
-                        <tr>
-                            <td class="col-sm-4" style="text-align: center;
+                    <tr>
+                        <td class="col-sm-4" style="text-align: center;
 vertical-align: middle!important;">
-                                配色主题
-                            </td>
-                            <td class="col-sm-6" style="text-align: center;
+                            配色主题
+                        </td>
+                        <td class="col-sm-6" style="text-align: center;
 vertical-align: middle!important;">
-                                <select name="" id="select_box" class="form-control">
+                            <select name="" id="select_box" class="form-control">
 
-                                    <option id="them_0" value=0>请选择配色主题</option>
+                                <option id="them_0" value=0>请选择配色主题</option>
 
-                                    {{--<option value=-1>自定义</option>--}}
-                                    @if(isset($theme->theme->items) AND count($theme->theme->items)>0)
-                                        @foreach($theme->theme->items as $k=> $item)
+                                {{--<option value=-1>自定义</option>--}}
+                                @if(isset($theme->theme->items) AND count($theme->theme->items)>0)
+                                    @foreach($theme->theme->items as $k=> $item)
+                                        <script>
+
+                                            theme["{{$item->id}}"] = {
+                                                'id': "{{$item->id}}",
+                                                'title': "{{$item->title}}",
+                                                'theme_id': "{{$item->theme_id}}",
+                                                'img': "{{$item->img}}",
+                                                'param': "{{$item->param}}"
+                                            }
+                                        </script>
+
+                                        <option value="{{$item->id}}" data-img="{{$item->img}}"
+
+                                                @if($item->is_default) selected @endif
+
+                                        >{{$item->title}}</option>
+
+
+                                        @if($item->is_default)
                                             <script>
+                                                img("{{$item->img}}", "{{$item->id}}")
+                                                CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
+                                                CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
+                                                $('#theme-no').show();
+                                                $('#theme-no span').text(theme["{{$item->id}}"]['title']);
+                                                $('#theme-no-img').show();
+                                                $('#theme-no-img').attr('src', theme["{{$item->id}}"]['img']);
+                                            </script> @endif
 
-                                                theme["{{$item->id}}"] = {
-                                                    'id': "{{$item->id}}",
-                                                    'title': "{{$item->title}}",
-                                                    'theme_id': "{{$item->theme_id}}",
-                                                    'img': "{{$item->img}}",
-                                                    'param': "{{$item->param}}"
-                                                }
-                                            </script>
-
-                                            <option value="{{$item->id}}" data-img="{{$item->img}}"
-
-                                                    @if($item->is_default) selected @endif
-
-                                            >{{$item->title}}</option>
-
-
-                                            @if($item->is_default)
-                                                <script>
-                                                    img("{{$item->img}}", "{{$item->id}}")
-                                                    CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
-                                                    CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
-                                                    $('#theme-no').show();
-                                                    $('#theme-no span').text(theme["{{$item->id}}"]['title']);
-                                                    $('#theme-no-img').show();
-                                                    $('#theme-no-img').attr('src', theme["{{$item->id}}"]['img']);
-                                                </script> @endif
-
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </td>
-                            <td class="col-sm-2">
-                                <img class="pull-right" id="img_theme" src="" width="150" height="180" alt="">
-                            </td>
-                        </tr>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </td>
+                        <td class="col-sm-2">
+                            <img class="pull-right" id="img_theme" src="" width="150" height="180" alt="">
+                        </td>
+                    </tr>
 
 
 
@@ -118,62 +118,68 @@ vertical-align: middle!important;">
 
                     </tr>
 
-
-
-                        <tr>
-                            <td class="col-sm-4" style="text-align: center;
+                    <tr>
+                        <td class="col-sm-4" style="text-align: center;
 vertical-align: middle!important;">
-                                菜单主题
-                            </td>
-                            <td class="col-sm-6" style="text-align: center;
+                            菜单主题
+                        </td>
+                        <td class="col-sm-6" style="text-align: center;
 vertical-align: middle!important;">
-                                <select name="" id="select_bars_box" class="form-control">
+                            <select name="" id="select_bars_box" class="form-control">
 
-                                    <option id="them_bars_0" value=0>请选择菜单主题</option>
+                                <option id="them_bars_0" value=0>请选择菜单主题</option>
                                 @if(isset($theme->theme->bars) AND count($theme->theme->bars)>0)
 
-                                        @foreach($theme->theme->bars as $k=> $item)
+                                    @foreach($theme->theme->bars as $k=> $item)
 
+                                        <script>
+                                            bars["{{$item->id}}"] = {
+                                                'id': "{{$item->id}}",
+                                                'title': "{{$item->title}}",
+                                                'theme_id': "{{$item->theme_id}}",
+                                                'param': "{{$item->param}}"
+                                            }
+                                        </script>
+
+                                        <option value="{{$item->id}}"
+
+                                                @if($item->is_default) selected @endif
+
+                                        >{{$item->title}}</option>
+
+
+                                        @if($item->is_default)
                                             <script>
-                                                bars["{{$item->id}}"] = {
-                                                    'id': "{{$item->id}}",
-                                                    'title': "{{$item->title}}",
-                                                    'theme_id': "{{$item->theme_id}}",
-                                                    'param': "{{$item->param}}"
-                                                }
-                                            </script>
+                                                bars("{{$item->id}}")
+                                                CommitMiniCodeExamine_data.log.bars = bars["{{$item->id}}"];
+                                            </script> @endif
+                                    @endforeach
 
-                                            <option value="{{$item->id}}"
+                                @endif
 
-                                                    @if($item->is_default) selected @endif
+                            </select>
+                        </td>
 
-                                            >{{$item->title}}</option>
+                    </tr>
 
+                    <tr>
+                        <td class="bar">注意：菜单至少2个，可拖拽排序，可修改文案</td>
+                        <td>
+                            <ul id="bar">
 
-                                            @if($item->is_default)
-                                                <script>
-                                                    bars("{{$item->id}}")
-                                                    CommitMiniCodeExamine_data.log.bars = bars["{{$item->id}}"];
-                                                </script> @endif
-                                        @endforeach
+                            </ul>
+                        </td>
+                    </tr>
 
-                                    @endif
-
-                                </select>
-                            </td>
-
-                        </tr>
-
-                        <tr>
-                            <td class="bar">注意：菜单至少2个，可拖拽排序，可修改文案</td>
-                            <td>
-                                <ul id="bar">
-
-                                </ul>
-                            </td>
-                        </tr>
-
-
+                    <tr id="quanzi" style="display: none">
+                        <td class="bar" style="text-align: center;">是否显示圈子</td>
+                        <td>
+                            <input type="radio"  class="quan_yes" name="quan" value="1" onclick="quanzi(1)">是
+                        </td>
+                        <td>
+                            <input type="radio"  class="quan_no"  style="margin-left: -350px;" name="quan" onclick="quanzi(0)" value="0" checked>否
+                        </td>
+                    </tr>
 
 
                     </tbody>
@@ -259,14 +265,54 @@ vertical-align: middle!important;">
             CommitMiniCode_data.ext_json.tabBar = JSON.parse(param);
             CommitMiniCodeExamine_data.log.bars = bars[val];
             bars(val);
+            $('#quanzi').show();
+            //$('.quan_yes').iCheck('check');
+            //$('.quan_no').iCheck('uncheck');
 
         } else {
             $('#bar').empty();
             $('.bar').hide();
             CommitMiniCodeExamine_data.log.bars = "";
             delete CommitMiniCode_data.ext_json.tabBar;
+            $('#quanzi').hide();
+            $('.quan_yes').iCheck('uncheck');
+            $('.quan_no').iCheck('check');
         }
     })
+
+
+    function quanzi(value){
+        console.log(value);
+        var val={
+            "pagePath": "pages/travels/index/index",
+            "text": "圈子",
+            "iconPath": "assets/image/travels.png",
+            "selectedIconPath": "assets/image/travels-r.png"
+        }
+
+        var li = ["<li id='quan_li' style=\"list-style: none\"  >",
+            "    <input type=\"text\"" +
+            "data-input=" +
+            JSON.stringify(val).replace(/"/g, "'") +
+            " " +
+            "class=\"form-control\" " +
+            "value=" + val.text +" " +
+            "placeholder="+"菜单原名："+ val.text +
+            ">",
+            "</li>"].join("");
+
+        if(!$('#quan_li').length){
+            $('#bar').append(li);return;
+        }
+
+        if($('#quan_li').length && value==0){
+            $('#quan_li input').val('');
+            $('#quan_li').hide();
+            return;
+        }
+        $('#quan_li').show();
+        $('#quan_li input').val('圈子');
+    }
 
     $('.color').colorpicker();
 
@@ -294,6 +340,8 @@ vertical-align: middle!important;">
                 " " +
                 "class=\"form-control\" " +
                 "value=" + val.text +
+                " " +
+                "placeholder="+"菜单原名："+ val.text +
                 ">",
                 "</li>"].join("");
 
@@ -351,10 +399,18 @@ vertical-align: middle!important;">
                 });
                 return
             }
+
+            if(bar.list.length>5){
+                swal({
+                    title: "小程序菜单最多5个",
+                    text:'',
+                    type: "error"
+                });
+                return
+            }
+
             CommitMiniCode_data.ext_json.tabBar = bar
         }
-
-        console.log(CommitMiniCode_data);
 
         $.post(CommitMiniCode_url, CommitMiniCode_data, function (result) {
 
