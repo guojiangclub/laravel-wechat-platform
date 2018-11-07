@@ -135,7 +135,7 @@ class MiniProgramController extends Controller
 
         $template_id = request('template_id');
 
-        if (!empty($template_id)) {
+        if (!empty($template_id) || $template_id==0) {
             $system_mini_template = $this->codeTemplateService->getCodeTemplateByTemplateID($template_id);
 
             if (0 == count($system_mini_template)) {
@@ -163,11 +163,11 @@ class MiniProgramController extends Controller
         $page = $this->codeService->getPage($appid);
 
 
-        if (!$page) {
-            admin_toastr('获取小程序的第三方提交代码的页面配置', 'warning');
-
-            return redirect()->route('admin.wechat.list', ['type' => 2]);
-        }
+//        if (!$page) {
+//            admin_toastr('获取小程序的第三方提交代码的页面配置', 'warning');
+//
+//            return redirect()->route('admin.wechat.list', ['type' => 2]);
+//        }
 
         $audit = $this->codeService->getAppAuditStatus($appid);
 
