@@ -412,6 +412,8 @@ vertical-align: middle!important;">
             CommitMiniCode_data.ext_json.tabBar = bar
         }
 
+        console.log(CommitMiniCode_data);
+
         $.post(CommitMiniCode_url, CommitMiniCode_data, function (result) {
 
             if (result.status) {
