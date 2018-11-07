@@ -16,6 +16,7 @@ use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
 use iBrand\Wechat\Platform\Repositories\ThemeRepository;
 use iBrand\Wechat\Platform\Services\CodeTemplateService;
+use iBrand\Wechat\Platform\Repositories\ThemeTemplateRepository;
 
 /**
  * Class CodeTemplateController.
@@ -28,14 +29,18 @@ class CodeTemplateController extends Controller
 
     protected $themeRepository;
 
+    protected $themeTemplateRepository;
+
     public function __construct(
-        CodeTemplateService $codeTemplateService, ThemeRepository $themeRepository
+        CodeTemplateService $codeTemplateService, ThemeRepository $themeRepository,ThemeTemplateRepository $themeTemplateRepository
     ) {
         $this->codeTemplateService = $codeTemplateService;
 
         $this->themeRepository = $themeRepository;
 
         $this->errcode = config('mini_program_errcode');
+
+        $this->themeTemplateRepository=$themeTemplateRepository;
     }
 
     /**
@@ -111,6 +116,11 @@ class CodeTemplateController extends Controller
     public function delete($id)
     {
         $res = $this->codeTemplateService->deleteCodeTemplate($id);
+
+        if (isset($res['errcode'])  and 0 == $res['errcode']) {
+
+            $this->themeTemplateRepository->deleteWhere(['template_id'=>$id]);
+        }
 
         return $this->admin_wechat_api($res);
     }

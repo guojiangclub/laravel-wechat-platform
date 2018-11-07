@@ -145,7 +145,7 @@
 
                 <div class="template_select" style="display: none;"><select id="template_select"
                                                                             style="height: 35px;width: 250px;">
-                        <option value=0>请选择模板</option>
+                        <option value=-1>请选择模板</option>
                         @if(count($template_list)>0)
                             @foreach($template_list as $item)
                                 <option value="{{$item['template_id']}}"
@@ -218,7 +218,7 @@
             function () {
 
                 var val = $('.showSweetAlert #template_select').find("option:selected").val();
-                if (val == 0) {
+                if (val == -1) {
                     toastr.error("请选择模板");
                     return;
                 }
