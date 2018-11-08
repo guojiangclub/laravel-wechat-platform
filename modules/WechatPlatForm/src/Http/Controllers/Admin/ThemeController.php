@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+
 /**
  * Class ThemeController.
  */
@@ -479,6 +480,24 @@ class ThemeController extends Controller
     }
 
     /**
+     * @param $id
+     * @return mixed|string
+     */
+    public function exportItem($id){
+
+        $theme = $this->themeItemsRepository->find($id);
+
+        if ($theme) {
+
+            return $theme;
+
+        }
+
+        return '';
+    }
+
+
+    /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -541,6 +560,71 @@ class ThemeController extends Controller
                         }
 
                     }
+
+                }
+
+                DB::commit();
+
+                return $this->api([], true);
+
+            } catch (\Exception $exception) {
+
+                return $this->api([], false, 400, '导入失败,文件格式错误');
+
+            }
+
+
+        }
+
+        return $this->api([], false, 400, '导入失败');
+
+
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadItem(Request $request)
+    {
+
+        $file = $request->file('file');
+
+        if ($file) {
+
+            $kuoname = $file->getClientOriginalExtension();
+
+            if ($kuoname != 'json') {
+
+                return $this->api([], false, 400, '文件类型不正确非.json文件');
+            }
+
+            $input = json_decode(file_get_contents($file->getRealPath()), true);
+
+            try {
+
+                DB::beginTransaction();
+
+
+                if(!isset($input['type']) || $input['type']!=request('amp;theme_type')){
+
+                    return $this->api([], false, 400, '导入失败,文件数据错误');
+
+                }
+
+                if (count($input) > 0) {
+
+                        $this->themeItemsRepository->create(
+                                [
+                                    'theme_id' => request('amp;theme_id'),
+                                    'type' => $input['type'],
+                                    'title' => $input['title'] . '-' . rand(0, 100),
+                                    'img' => $input['img'],
+                                    'param' => $input['param'],
+                                    'is_default' => $input['is_default'],
+                        ]);
+
 
                 }
 

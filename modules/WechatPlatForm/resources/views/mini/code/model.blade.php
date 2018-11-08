@@ -69,7 +69,7 @@ vertical-align: middle!important;">
                                             <script>
                                                 img("{{$item->img}}", "{{$item->id}}")
                                                 CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
-                                                CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
+                                                CommitMiniCode_data.ext_json.ext.appid="{{request('key')}}";
                                                 $('#theme-no').show();
                                                 $('#theme-no span').text(theme["{{$item->id}}"]['title']);
                                                 $('#theme-no-img').show();
@@ -212,7 +212,7 @@ vertical-align: middle!important;">
             theme[val]['param'] = param
             $('#img_theme').attr('src', img);
             CommitMiniCode_data.ext_json.ext = JSON.parse(param);
-            CommitMiniCode_data.ext_json.ext.appid="{{md5(request('appid'))}}";
+            CommitMiniCode_data.ext_json.ext.appid="{{request('key')}}";
             CommitMiniCodeExamine_data.log.theme = theme[val];
             $('#theme-no').show();
             $('#theme-no span').text(theme[val]['title']);

@@ -26,7 +26,7 @@
     <div class="tab-content">
         <div id="tab-1" class="tab-pane active">
             <div class="panel-body">
-
+                <th class="col-sm-3"><a id="upload-json" data-style="expand-right"  class="btn" type="submit" disabled  >导入配色主题</a></th>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -68,6 +68,13 @@
                                         <i data-toggle="tooltip" data-placement="top"
                                            class="fa fa-asterisk"
                                            title="设置成默认"></i></a>
+
+                                    <a class="btn btn-xs btn-info download"
+                                       download="{{$item->title}}.json" href="{{route('admin.mini.theme.item.export',['theme_id'=>$item->id])}}">
+                                        <i data-toggle="tooltip" data-placement="top"
+                                           class="fa fa-download"
+                                           title="下载配色主题"></i>
+                                    </a>
 
 
                                     <a class="btn btn-xs btn-danger delete"
@@ -179,6 +186,45 @@
             });
         });
     });
+
+</script>
+
+<script>  $(document).ready(function () {
+        var uploader = WebUploader.create({
+            auto: true,
+            swf: '{{url('libs/webuploader-0.1.5/Uploader.swf')}}',
+            server: '{{route('admin.mini.theme.upload.item',['_token'=>csrf_token(),'theme_type'=>request('type'),'theme_id'=>request('theme_id')])}}',
+            pick: '#upload-json',
+            fileVal: 'file',
+            accept: {
+
+            }
+        })
+
+        uploader.on('uploadSuccess', function (file, res) {
+            if (res.status) {
+                swal({
+                    title: "导入成功",
+                    text: '',
+                    type: "success"
+                }, function () {
+                    location = '';
+                });
+            } else {
+                swal({
+                    title: "导入失败",
+                    text: res.message,
+                    type: "error"
+                }, function () {
+                    location = '';
+                });
+
+            }
+
+        });
+
+    })
+
 
 </script>
 

@@ -72,7 +72,7 @@ class CodeTemplateController extends Controller
         }
 
         if (isset($template_list_arr['template_list'])) {
-            $template_list = $template_list_arr['template_list'];
+            $template_list=collect($template_list_arr['template_list'])->sortByDesc('template_id');
         }
 
         $system_mini_master_template = settings('system_mini_master_template');

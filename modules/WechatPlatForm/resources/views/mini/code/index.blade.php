@@ -191,7 +191,7 @@
                                <td>
                                    <a class="label label-info" id="users-btn" data-toggle="modal"
                                       data-target="#modal" data-backdrop="static" data-keyboard="false"
-                                      data-url="{{route('admin.mini.code.model',['template_id'=>request('template_id')])}}">
+                                      data-url="{{route('admin.mini.code.model',['template_id'=>request('template_id'),'key'=>request('key')])}}">
                                        自定义
                                    </a>
                                </td>

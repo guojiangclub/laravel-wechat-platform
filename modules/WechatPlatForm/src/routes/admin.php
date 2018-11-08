@@ -94,7 +94,11 @@ $router->group(['prefix' => 'wechat_platform'], function ($router) {
 
             $router->get('/{id}/export', 'ThemeController@export')->name('admin.mini.theme.export');
 
+            $router->get('/{id}/item/export', 'ThemeController@exportItem')->name('admin.mini.theme.item.export');
+
             $router->post('/upload', 'ThemeController@upload')->name('admin.mini.theme.upload');
+
+            $router->post('/upload/item', 'ThemeController@uploadItem')->name('admin.mini.theme.upload.item');
 
             $router->post('/update', 'ThemeController@update')->name('admin.mini.theme.update');
 

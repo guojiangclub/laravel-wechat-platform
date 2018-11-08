@@ -59,6 +59,9 @@
                     <thead>
                     <tr>
                         <th>appid</th>
+                        @if($name=='小程序')
+                            <th>key</th>
+                        @endif
                         <th>客户ID</th>
                         <th>{{$name}}名称</th>
                         <th>原始ID</th>
@@ -73,6 +76,7 @@
                         @foreach ($lists as $item)
                             <tr>
                                 <td>{{$item->appid}}</td>
+                                <td>{{md5($item->appid)}}</td>
                                 <td>{{$item->client_id}}</td>
                                 <td>{{$item->nick_name}}</td>
                                 <td>{{$item->user_name}}</td>
@@ -103,8 +107,8 @@
 
 
                                         <a class="btn btn-xs btn-info custom"
-                                           onclick='custom("{{$item->appid}}")'
-                                           data-href="{{route('admin.mini.send.index',['appid'=>$item->appid,'type'=> 'custom'])}}"
+                                           onclick='custom("{{$item->appid}}","{{md5($item->appid)}}")'
+                                           data-href="{{route('admin.mini.send.index',['appid'=>$item->appid,'type'=> 'custom','key'=>md5($item->appid)])}}"
                                            target="_blank">
                                             <i data-toggle="tooltip" data-placement="top" class="fa fa-send"
                                                title="发布小程序自定义版本"></i></a>
@@ -203,7 +207,7 @@
 <script>
 
 
-    function custom(appid) {
+    function custom(appid,key) {
 
         var html = $('.template_select').html();
         swal({
@@ -230,7 +234,7 @@
                     'template_id': template_id,
                 }
 
-                var url = "{{route('admin.mini.send.index')}}" + '?appid=' + appid + '&template_id=' + template_id;
+                var url = "{{route('admin.mini.send.index')}}" + '?appid=' + appid + '&template_id=' + template_id+'&key='+key;
 
                 window.location.href = url;
             });
