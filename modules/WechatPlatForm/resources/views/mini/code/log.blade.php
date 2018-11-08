@@ -16,8 +16,8 @@
                         <th>提交审核时间</th>
                         <th>状态</th>
                         <th>模板ID</th>
-                        <th>版本</th>
                         <th>描述</th>
+                        <th>版本</th>
                         <th>体验二维码</th>
                         <th>备注</th>
                     </tr>

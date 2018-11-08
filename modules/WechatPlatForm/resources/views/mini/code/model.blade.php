@@ -67,6 +67,7 @@ vertical-align: middle!important;">
 
                                         @if($item->is_default)
                                             <script>
+                                                $('#quanzi').show();
                                                 img("{{$item->img}}", "{{$item->id}}")
                                                 CommitMiniCodeExamine_data.log.theme = theme["{{$item->id}}"];
                                                 CommitMiniCode_data.ext_json.ext.appid="{{request('key')}}";
