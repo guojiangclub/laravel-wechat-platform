@@ -46,6 +46,8 @@
                                            href="{{route('admin.mini.code.getAppQrCode',['appid'=>request('appid'),'path'=>$template->address,'type'=>'image'])}}">查看</a>
                                     @elseif($item->status==4)
                                         审核撤回
+                                    @elseif($item->status==5)
+                                        取消发布
                                     @endif
                                 </td>
 

@@ -215,7 +215,13 @@ class MiniProgramController extends Controller
                 ['text' => '小程序列表', 'url' => '', 'no-pjax' => 1, 'left-menu-active' => '小程序列表']
             );
 
-            $content->body(view('wechat-platform::mini.code.index', compact('theme', 'system_mini_template', 'appid', 'testers', 'category', 'page', 'audit', 'status_message', 'template_id')));
+            $mini_title='首页';
+
+            $mini_tag='商城';
+
+            $mini_address='pages/index/index/index';
+
+            $content->body(view('wechat-platform::mini.code.index', compact('theme', 'system_mini_template', 'appid', 'testers', 'category', 'page', 'audit', 'status_message', 'template_id','mini_title','mini_address','mini_tag')));
         });
     }
 

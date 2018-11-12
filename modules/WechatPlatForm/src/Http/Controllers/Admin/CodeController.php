@@ -268,4 +268,19 @@ class CodeController extends Controller
             $content->body(view('wechat-platform::mini.code.log', compact('lists')));
         });
     }
+
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
+     */
+    public function Reexamination(){
+
+        $id=request('id');
+
+        $result=$this->codePublishRepository->update(['status'=>5],$id);
+
+        return $this->admin_wechat_api($result);
+    }
+
 }

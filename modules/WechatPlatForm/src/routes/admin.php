@@ -79,6 +79,8 @@ $router->group(['prefix' => 'wechat_platform'], function ($router) {
             $router->post('/withdrawAudit', 'CodeController@withdrawAudit')->name('admin.mini.code.withdrawAudit');
 
             $router->post('/release', 'CodeController@release')->name('admin.mini.code.release');
+
+            $router->post('/Reexamination', 'CodeController@Reexamination')->name('admin.mini.code.Reexamination');
         });
 
 

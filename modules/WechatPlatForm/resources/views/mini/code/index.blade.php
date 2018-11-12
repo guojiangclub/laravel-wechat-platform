@@ -41,7 +41,7 @@
 <div class="row">
 
 
-    <div class="col-md-4">
+    <div class="col-md-3">
 
         <div class="box box-default">
 
@@ -105,6 +105,12 @@
                                     审核成功
                                     <br>
                                     <a class="label label-success pull-right" onclick="release()">发布上线</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <a class="label label-info pull-right" onclick='Reexamination("{{isset($audit->id)?$audit->id:0}}")'>取消发布</a>
                                 </td>
                             </tr>
                         @endif
@@ -212,7 +218,7 @@
 
 
     {{--中间--}}
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="box box-default">
             <div class="box-header with-border">
                 <h3 class="box-title" style="margin-right: 10px;">体验者微信</h3>
@@ -254,11 +260,63 @@
 
             </div>
 
+
         </div>
     </div>
     {{--右边--}}
 
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title" style="margin-right: 10px;">小程序审核页面设置</h3>
+
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <td>小程序的页面</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="mini_address">{{$mini_address}}</td>
+                                <td>
+                                    <a onclick='item_list_edit("#mini_address","小程序的页面")' class="label label-info">修改</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>小程序页面的标题</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="mini_title">{{$mini_title}}</td>
+                                <td>
+                                    <a onclick='item_list_edit("#mini_title","小程序页面的标题")' class="label label-info">修改</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>小程序的标签</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="mini_tag">{{$mini_tag}}</td>
+                                <td>
+                                    <a onclick='item_list_edit("#mini_tag","小程序的标签")' class="label label-info">修改</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-3">
         <div class="box box-default">
             <div class="box-header with-border">
                 <h3 class="box-title" style="margin-right: 10px;">操作</h3>
@@ -327,6 +385,10 @@
 @include('wechat-platform::mini.code.script')
 
 <script>
+
+     window.mini_address="{{$mini_address}}";
+     window.mini_title="{{$mini_title}}";
+     window.mini_tag="{{$mini_tag}}";
 
     @if(isset($audit->status) AND $audit->status==1)
     window.setTimeout(go, 100);
@@ -401,12 +463,13 @@
 
     var CommitMiniCodeExamine_data_ext_json=CommitMiniCode_data.ext_json;
 
+    //page
     var CommitMiniCodeExamine_data = {
         _token: _token,
         'item_list': {
-            "address": "{{$page}}",
-            "tag": "商城",
-            "title": "首页",
+            "address": window.mini_address,
+            "tag": window.mini_tag,
+            "title": window.mini_title,
         },
         'log': {
             'appid': "{{request('appid')}}",
@@ -416,7 +479,7 @@
                 'user_desc': "{{$system_mini_template['user_desc']}}",
                 'create_time': "{{$system_mini_template['create_time']}}",
                 'category': category_txt,
-                'address': "{{$page}}"
+                "address": window.mini_address,
             },
             'theme':'',
             'ext_json':CommitMiniCodeExamine_data_ext_json
@@ -456,7 +519,10 @@
                     return false
                 }
                 data.log.note = inputValue;
-
+                data.item_list.address=window.mini_address;
+                data.item_list.title=window.mini_title;
+                data.item_list.tag=window.mini_tag;
+                data.log.template.address = window.mini_address;
                 $.post(url, data, function (result) {
 
                     if (result.status) {
@@ -584,4 +650,100 @@
 
 </script>
 
+
+<script>
+    function Reexamination(id) {
+        var url = window.location.href;
+        swal({
+            title: "确定要取消发布么?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确认",
+            cancelButtonText: '取消',
+            closeOnConfirm: false
+        }, function () {
+            console.log(url);
+            var post = "{{route('admin.mini.code.Reexamination')}}"+"?id="+id;
+            var data = {
+                _token: _token,
+            }
+            $.post(post, data, function (result) {
+
+                if (result.status) {
+
+                    swal({
+                        title: "取消发布成功",
+                        text: "",
+                        type: "success",
+                        confirmButtonText: "确定"
+                    }, function () {
+                        location.href = url;
+
+                    });
+
+                } else {
+                    swal({
+                        title: "取消发布失败",
+                        text: result.message,
+                        type: "error"
+                    });
+
+                }
+            });
+        });
+
+    }
+</script>
+
+<script>
+    function item_list_edit(id,title) {
+
+        if(id=='#mini_address'){
+            var txt=window.mini_address;
+        }
+        if(id=='#mini_title'){
+            var txt=window. mini_title;
+        }
+        if(id=='#mini_tag'){
+            var txt=window.mini_tag;
+        }
+        swal({
+                title:title,
+                text: "",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确认",
+                cancelButtonText: '取消',
+                closeOnConfirm: false,
+                type: "input",
+                animation: "slide-from-top",
+                inputPlaceholder: "",
+                inputValue:txt,
+            },
+            function (inputValue) {
+                if (!inputValue) {
+                    swal.showInputError("不能为空");
+                    return false
+                }
+                $(id).text(inputValue);
+                if(id=='#mini_address'){
+                    window.mini_address=inputValue;
+                }
+                if(id=='#mini_title'){
+                    window. mini_title=inputValue;
+                }
+                if(id=='#mini_tag'){
+                    window.mini_tag=inputValue;
+                }
+                swal({
+                    title: "修改成功",
+                    text: "",
+                    type: "success",
+                    confirmButtonText: "确定"
+                });
+            });
+    }
+</script>
 
