@@ -622,7 +622,7 @@ class ThemeController extends Controller
                                     'title' => $input['title'] . '-' . rand(0, 100),
                                     'img' => $input['img'],
                                     'param' => $input['param'],
-                                    'is_default' => $input['is_default'],
+                                    'is_default' => 0,
                         ]);
 
 
