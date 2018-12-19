@@ -174,7 +174,7 @@ class MiniProgramController extends Controller
 
         $status_message = '';
 
-        if ($audit and count($audit) > 0) {
+        if ($audit and ibrand_count($audit) > 0) {
 
             switch ($audit->status) {
 

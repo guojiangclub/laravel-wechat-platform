@@ -32,3 +32,23 @@ function is_color($str){
    return preg_match($exp,$str);
 
 }
+
+function ibrand_count($obj){
+
+    if(is_array($obj)){
+        return count($obj);
+    }
+
+    if(is_object($obj)){
+
+        return $obj->count();
+    }
+
+    if($obj){
+
+        return 1;
+    }
+
+    return 0;
+
+}
