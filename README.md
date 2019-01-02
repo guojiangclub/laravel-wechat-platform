@@ -32,7 +32,6 @@ composer require ibrand/laravel-wechat-platform:~1.0 -vvv
 ```
 iBrand\Wechat\Platform\Providers\WechatPlatformServiceProvider::class,
 iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
-
 ```
 
 请按照步骤执行相关php artisan操作
@@ -61,7 +60,6 @@ WECHAT_OPEN_PLATFORM_APPID=             //微信开放平台AppID
 WECHAT_OPEN_PLATFORM_SECRET=	        //微信开放平台AppSecret
 WECHAT_OPEN_PLATFORM_TOKEN=             //消息校验Token
 WECHAT_OPEN_PLATFORM_AES_KEY=           //消息加解密Key
-
 ```
 CSRF验证中排除的URI
 找到App\Http\Middleware\VerifyCsrfToken中except属性数组中添加一条
@@ -76,7 +74,6 @@ CSRF验证中排除的URI
 ```
 'client' => \iBrand\Wechat\Platform\Http\Middleware\ClientVerify::class,
 'parameter' => \iBrand\Wechat\Platform\Http\Middleware\ParameterVerify::class,
-
 ```
 
 修改config\auth.php文件
@@ -86,7 +83,6 @@ guards数组添加
             'driver' => 'passport',
             'provider' => 'clients',
 ],
-
 ```
 providers数组添加
 ```
@@ -94,7 +90,6 @@ providers数组添加
             'driver' => 'eloquent',
             'model' =>iBrand\Wechat\Platform\Models\Clients::class,
 ],
-
 ```
 
 后台地址
