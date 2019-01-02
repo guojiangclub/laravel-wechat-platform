@@ -13,9 +13,17 @@ namespace iBrand\Wechat\Platform\Providers;
 
 use iBrand\Wechat\Platform\WechatPlatFormBackend;
 use Illuminate\Support\ServiceProvider;
+use iBrand\Wechat\Platform\Console\InstallCommand;
 
 class WechatPlatformServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     */
+    protected $commands = [
+        InstallCommand::class,
+    ];
+
     /**
      * Bootstrap any application services.
      */
@@ -40,6 +48,7 @@ class WechatPlatformServiceProvider extends ServiceProvider
 
             return $this->loadMigrationsFrom(__DIR__.'/../../migrations');
         }
+
     }
 
     /**
@@ -50,5 +59,11 @@ class WechatPlatformServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config.php', 'wechat-platform'
         );
+
+        $this->commands($this->commands);
+
     }
+
+
+
 }

@@ -18,9 +18,6 @@
 
 3. 后台包括微信公众号管理和小程序管理，实现一键提交审核，发布微信小程序，自定义小程序模板等功能。
 
-### 
-![MacDown Screenshot](http://www.itsxu.cn/123.png)
-
 
 ## 安装
 
@@ -44,16 +41,10 @@ iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
  php artisan vendor:publish --all
 ```
 ```
- php artisan migrate
-```
-```
  php artisan ibrand:backend-install
 ```
 ```
- php artisan migrate
-```
-```
- php artisan admin:import ibrand-wechat-platform-backend
+ php artisan ibrand-wechat-platform:install
 ```
 ```
  php artisan passport:install 
