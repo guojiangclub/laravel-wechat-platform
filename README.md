@@ -22,7 +22,7 @@
 ## 安装
 
 ```
-composer require ibrand/laravel-wechat-platform:~1.0 -vvv
+composer require ibrand/laravel-wechat-platform:dev-master -vvv
 ```
 
 低于 Laravel5.5 版本
