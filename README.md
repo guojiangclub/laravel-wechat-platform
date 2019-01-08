@@ -21,20 +21,27 @@
 
 ## 安装
 
+>
+```
+composer require ibrand/laravel-wechat-platform:~2.0 -vvv
+```
+
+> Laravel版本<=5.5请安装1.0
 ```
 composer require ibrand/laravel-wechat-platform:~1.0 -vvv
 ```
 
-低于 Laravel5.5 版本
-
-`config/app.php` 文件中 'providers' 添加
+>laravel版本<5.5 请自行注册provider  `config/app.php` 文件中 'providers' 添加
 
 ```
 iBrand\Wechat\Platform\Providers\WechatPlatformServiceProvider::class,
 iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
+
 ```
 
-请按照步骤执行相关php artisan操作
+
+
+>请按照步骤执行相关php artisan操作
 
 ```
  php artisan vendor:publish --all
@@ -53,7 +60,7 @@ iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
 
 ```
 
-配置 .env文件
+>配置 .env文件
 
 ```
 WECHAT_OPEN_PLATFORM_APPID=             //微信开放平台AppID
@@ -61,14 +68,14 @@ WECHAT_OPEN_PLATFORM_SECRET=	        //微信开放平台AppSecret
 WECHAT_OPEN_PLATFORM_TOKEN=             //消息校验Token
 WECHAT_OPEN_PLATFORM_AES_KEY=           //消息加解密Key
 ```
-CSRF验证中排除的URI
+>CSRF验证中排除的URI
 找到App\Http\Middleware\VerifyCsrfToken中except属性数组中添加一条
 
 ```
  "/oauth/token"
 ```
 
-添加routeMiddleware
+>添加routeMiddleware
 找到App\Http\Kernel中routeMiddleware属性数组中添加
 
 ```
@@ -76,7 +83,7 @@ CSRF验证中排除的URI
 'parameter' => \iBrand\Wechat\Platform\Http\Middleware\ParameterVerify::class,
 ```
 
-修改config\auth.php文件
+>修改config\auth.php文件
 guards数组添加
 ```
  'clients' => [
@@ -84,7 +91,7 @@ guards数组添加
             'provider' => 'clients',
 ],
 ```
-providers数组添加
+>providers数组添加
 ```
 'clients' => [
             'driver' => 'eloquent',
@@ -92,7 +99,7 @@ providers数组添加
 ],
 ```
 
-后台地址
+>后台地址
 
 ```
 域名/admin 
@@ -100,7 +107,7 @@ providers数组添加
 用户名: admin 密码: admin
 ```
 
-接口文档整理中。
+>接口文档整理中。
 
 
 
