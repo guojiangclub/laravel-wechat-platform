@@ -1,114 +1,58 @@
-## 微信第三方平台
+<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-[![Latest Stable Version](https://poser.pugx.org/ibrand/laravel-wechat-platform/v/stable)](https://packagist.org/packages/ibrand/laravel-wechat-platform)
-[![Latest Unstable Version](https://poser.pugx.org/ibrand/laravel-wechat-platform/v/unstable)](https://packagist.org/packages/ibrand/laravel-wechat-platform#dev-master)
-[![License](https://poser.pugx.org/ibrand/laravel-wechat-platform/license)](https://packagist.org/packages/ibrand/laravel-wechat-platform)
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</p>
 
-1. 基于 [overtrue/wechat](https://github.com/overtrue/wechat) 进行扩展开发
-2. [微信第三方平台概述](https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419318292&token=&lang=zh_CN)
+## About Laravel
 
-## Featrue
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
 
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-主要实现功能：
+Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
 
-1. 微信第三方管理后台，实现对微信公众号和微信小程序，授权的统一管理。（搭建自己的微信第三方授权平台）。
+## Learning Laravel
 
-2. 提供常用微信公众号和小程序开发相关的接口。
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
 
-3. 后台包括微信公众号管理和小程序管理，实现一键提交审核，发布微信小程序，自定义小程序模板等功能。
+If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
 
+## Laravel Sponsors
 
-## 安装
+We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
 
->
-```
-composer require ibrand/laravel-wechat-platform:~2.0 -vvv
-```
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[British Software Development](https://www.britishsoftware.co)**
+- [Fragrantica](https://www.fragrantica.com)
+- [SOFTonSOFA](https://softonsofa.com/)
+- [User10](https://user10.com)
+- [Soumettre.fr](https://soumettre.fr/)
+- [CodeBrisk](https://codebrisk.com)
+- [1Forge](https://1forge.com)
+- [TECPRESSO](https://tecpresso.co.jp/)
+- [Pulse Storm](http://www.pulsestorm.net/)
+- [Runtime Converter](http://runtimeconverter.com/)
+- [WebL'Agence](https://weblagence.com/)
 
-> Laravel版本<=5.5请安装1.0
-```
-composer require ibrand/laravel-wechat-platform:~1.0 -vvv
-```
+## Contributing
 
->laravel版本<5.5 请自行注册provider  `config/app.php` 文件中 'providers' 添加
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-```
-iBrand\Wechat\Platform\Providers\WechatPlatformServiceProvider::class,
-iBrand\Wechat\Platform\Providers\RouteServiceProvider::class,
+## Security Vulnerabilities
 
-```
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## License
 
-
->请按照步骤执行相关php artisan操作
-
-```
- php artisan vendor:publish --all
-```
-```
- php artisan ibrand:backend-install
-```
-```
- php artisan ibrand-wechat-platform:install
-```
-```
- php artisan passport:install 
-```
-```
- php artisan storage:link
-
-```
-
->配置 .env文件
-
-```
-WECHAT_OPEN_PLATFORM_APPID=             //微信开放平台AppID
-WECHAT_OPEN_PLATFORM_SECRET=	        //微信开放平台AppSecret
-WECHAT_OPEN_PLATFORM_TOKEN=             //消息校验Token
-WECHAT_OPEN_PLATFORM_AES_KEY=           //消息加解密Key
-```
->CSRF验证中排除的URI
-找到App\Http\Middleware\VerifyCsrfToken中except属性数组中添加一条
-
-```
- "/oauth/token"
-```
-
->添加routeMiddleware
-找到App\Http\Kernel中routeMiddleware属性数组中添加
-
-```
-'client' => \iBrand\Wechat\Platform\Http\Middleware\ClientVerify::class,
-'parameter' => \iBrand\Wechat\Platform\Http\Middleware\ParameterVerify::class,
-```
-
->修改config\auth.php文件
-guards数组添加
-```
- 'clients' => [
-            'driver' => 'passport',
-            'provider' => 'clients',
-],
-```
->providers数组添加
-```
-'clients' => [
-            'driver' => 'eloquent',
-            'model' =>iBrand\Wechat\Platform\Models\Clients::class,
-],
-```
-
->后台地址
-
-```
-域名/admin 
-
-用户名: admin 密码: admin
-```
-
->接口文档整理中。
-
-
-
-
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
