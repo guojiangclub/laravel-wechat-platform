@@ -16,7 +16,9 @@ iBrand Wechat Platform 是一个免费开源的微信第三方平台，基于 La
 
 ## 文档
 
-- [API](https://www.ibrand.cc/docs/wechat/v1/index)
+- [使用说明 & API](https://www.ibrand.cc/docs/wechat/v1/index)
+- [微信公众平台技术文档](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1445241432)
+- [微信第三方平台](https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419318292&token=&lang=zh_CN)
 
 ## 体验
 
@@ -27,6 +29,10 @@ iBrand Wechat Platform 是一个免费开源的微信第三方平台，基于 La
 该项目正在持续迭代更新中，如果你想参与到本项目中来，请提交 Pull Request !
 
 如果你发现任何问题或者需求，请[提交ISSUE](https://github.com/ibrandcc/laravel-wechat-platform/issues)
+
+## 开源系列
+
+[Laravel 社交电商](https://github.com/ibrandcc/ecommerce-open-api)    ·    [社交电商微信小程序](https://github.com/ibrandcc/miniprogram-ecommerce-open-source)    ·  [微信第三方平台](https://github.com/ibrandcc/laravel-wechat-platform)
 
 ## 社交账号
 
