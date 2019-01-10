@@ -11,6 +11,7 @@
 
 namespace iBrand\Wechat\Platform\Providers;
 
+use iBrand\Wechat\Platform\Console\InstallCommand;
 use iBrand\Wechat\Platform\WechatPlatFormBackend;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,6 +48,8 @@ class WechatPlatformServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->commands(InstallCommand::class);
+
         $this->mergeConfigFrom(
             __DIR__.'/../config.php', 'wechat-platform'
         );
