@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -14,9 +14,9 @@ namespace iBrand\Wechat\Platform\Http\Controllers\Admin;
 use Encore\Admin\Facades\Admin as LaravelAdmin;
 use Encore\Admin\Layout\Content;
 use iBrand\Wechat\Platform\Http\Controllers\Controller;
+use iBrand\Wechat\Platform\Services\CodeTemplateService;
 use iBrand\Wechat\Platform\Repositories\ThemeRepository;
 use iBrand\Wechat\Platform\Repositories\ThemeTemplateRepository;
-use iBrand\Wechat\Platform\Services\CodeTemplateService;
 
 /**
  * Class CodeTemplateController.
@@ -32,15 +32,16 @@ class CodeTemplateController extends Controller
     protected $themeTemplateRepository;
 
     public function __construct(
-        CodeTemplateService $codeTemplateService, ThemeRepository $themeRepository, ThemeTemplateRepository $themeTemplateRepository
-    ) {
+        CodeTemplateService $codeTemplateService, ThemeRepository $themeRepository ,ThemeTemplateRepository $themeTemplateRepository
+    )
+    {
         $this->codeTemplateService = $codeTemplateService;
 
         $this->themeRepository = $themeRepository;
 
         $this->errcode = config('mini_program_errcode');
 
-        $this->themeTemplateRepository = $themeTemplateRepository;
+        $this->themeTemplateRepository=$themeTemplateRepository;
     }
 
     /**
@@ -71,7 +72,7 @@ class CodeTemplateController extends Controller
         }
 
         if (isset($template_list_arr['template_list'])) {
-            $template_list = collect($template_list_arr['template_list'])->sortByDesc('template_id');
+            $template_list=collect($template_list_arr['template_list'])->sortByDesc('template_id');
         }
 
         $system_mini_master_template = settings('system_mini_master_template');
@@ -88,7 +89,7 @@ class CodeTemplateController extends Controller
                 ['text' => $name, 'url' => '', 'no-pjax' => 1, 'left-menu-active' => '小程序模板']
             );
 
-            $content->body(view('wechat-platform::mini.code_template.'.$view, compact('theme_list', 'draft_list', 'template_list', 'name', 'system_mini_master_template', 'system_mini_dev_template')));
+            $content->body(view('wechat-platform::mini.code_template.' . $view, compact('theme_list', 'draft_list', 'template_list', 'name', 'system_mini_master_template', 'system_mini_dev_template')));
         });
     }
 
@@ -117,8 +118,9 @@ class CodeTemplateController extends Controller
     {
         $res = $this->codeTemplateService->deleteCodeTemplate($id);
 
-        if (isset($res['errcode']) and 0 == $res['errcode']) {
-            $this->themeTemplateRepository->deleteWhere(['template_id' => $id]);
+        if (isset($res['errcode'])  and 0 == $res['errcode']) {
+
+            $this->themeTemplateRepository->deleteWhere(['template_id'=>$id]);
         }
 
         return $this->admin_wechat_api($res);
@@ -135,7 +137,7 @@ class CodeTemplateController extends Controller
 
         $type = $input['type'];
 
-        $system_mini_template_str = 'system_mini_'.$type.'_template';
+        $system_mini_template_str = 'system_mini_' . $type . '_template';
 
         $data[$system_mini_template_str] = $input;
 

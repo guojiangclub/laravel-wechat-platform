@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -197,13 +197,14 @@ class NoticeController extends Controller
                 $data['touser'] = $item;
                 // 调用接口
                 try {
-                    $res = $server->template_message->send($data);
+                    $res=$server->template_message->send($data);
 
-                    if (isset($res['errcode']) && 0 == $res['errcode']) {
+                    if(isset($res['errcode'])&&$res['errcode']==0){
                         ++$i;
-                    } else {
+                    }else{
                         $error[] = $data['touser'];
                     }
+
                 } catch (\Exception $e) {
                     $error[] = $data['touser'];
                 }

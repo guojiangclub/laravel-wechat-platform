@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -24,7 +24,8 @@ class AppCodeController extends Controller
 
     public function __construct(
         PlatformService $platformService
-    ) {
+    )
+    {
         $this->platform = $platformService;
     }
 

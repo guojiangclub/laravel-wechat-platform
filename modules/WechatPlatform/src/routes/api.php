@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -12,6 +12,7 @@
 $router->get('/', function () {
     dd(request()->header('appid'));
 });
+
 
 // 平台授权事件接收URL
 $router->any('/notify', 'NotifyController@notifyPlatform');
@@ -391,5 +392,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->group(['prefix' => 'decrypted'], function ($router) {
             $router->post('/', 'BaseController@decryptedData');
         });
+
     });
 });

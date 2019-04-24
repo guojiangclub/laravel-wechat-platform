@@ -84,7 +84,7 @@ class DomainService
         $data = [];
 
         foreach ($domain as $k => $item) {
-            if (is_array($item) and count($local[$k]) > 0) {
+            if (is_array($item) AND isset($local[$k]) AND count($local[$k]) > 0) {
                 foreach ($local[$k] as $litem) {
                     if (!in_array($litem, $domain[$k])) {
                         //$data[$k]=$local[$k];

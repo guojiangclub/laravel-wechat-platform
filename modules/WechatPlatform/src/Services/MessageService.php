@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -45,7 +45,8 @@ class MessageService
         PlatformService $platformService,
 
         CodePublishRepository $codePublishRepository
-    ) {
+    )
+    {
         $this->authorizerRepository = $authorizerRepository;
 
         $this->platformService = $platformService;
@@ -191,7 +192,7 @@ class MessageService
                     'content' => $message['Content'],
                 ];
 
-                $data = $this->BackCurl($url.'/wechat_call_back/message', $method = self::GET, $params);
+                $data = $this->BackCurl($url . '/wechat_call_back/message', $method = self::GET, $params);
 
                 return $this->BackMessage($data);
             }
@@ -215,7 +216,7 @@ class MessageService
      */
     public function callBackEvent($url, $data)
     {
-        $data = $this->BackCurl($url.'/wechat_call_back/event', $method = self::GET, $data);
+        $data = $this->BackCurl($url . '/wechat_call_back/event', $method = self::GET, $data);
         \Log::info($data);
 
         return $this->BackMessage($data);
@@ -226,8 +227,8 @@ class MessageService
      *
      * @param $url
      * @param string $method
-     * @param array  $params
-     * @param array  $request_header
+     * @param array $params
+     * @param array $request_header
      *
      * @return mixed
      */
@@ -235,7 +236,7 @@ class MessageService
     {
         $request_header = ['Content-Type' => 'application/x-www-form-urlencoded'];
         if (self::GET === $method || self::DELETE === $method) {
-            $url .= (stripos($url, '?') ? '&' : '?').http_build_query($params);
+            $url .= (stripos($url, '?') ? '&' : '?') . http_build_query($params);
             $params = [];
         }
         $ch = curl_init();
@@ -354,13 +355,11 @@ class MessageService
         return $server->server->serve();
     }
 
+
     /**
-     * 全网发布.
-     *
+     * 全网发布
      * @param $app_id
-     *
      * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -375,15 +374,18 @@ class MessageService
 
         $msg = $server->getMessage();
 
-        if ('text' == $msg['MsgType']) {
-            if ('TESTCOMPONENT_MSG_TYPE_TEXT' == $msg['Content']) {
+        if ($msg['MsgType'] == 'text') {
+
+            if ($msg['Content'] == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
                 $curOfficialAccount = $openPlatform->officialAccount($app_id, cache()->get($app_id));
 
-                $curOfficialAccount->customer_service->message($msg['Content'].'_callback')
+                $curOfficialAccount->customer_service->message($msg['Content'] . '_callback')
 
                     ->from($msg['ToUserName'])->to($msg['FromUserName'])->send();
                 die;
-            } elseif (0 == strpos($msg['Content'], 'QUERY_AUTH_CODE')) {
+
+            } elseif (strpos($msg['Content'], 'QUERY_AUTH_CODE') == 0) {
+
                 $code = substr($msg['Content'], 16);
 
                 $authorizerInfo = $openPlatform->handleAuthorize($code)['authorization_info'];
@@ -394,12 +396,14 @@ class MessageService
                     $app_id,
                     cache()->get($app_id)
                 );
-                $curOfficialAccount->customer_service->message($code.'_from_api')
+                $curOfficialAccount->customer_service->message($code . "_from_api")
                     ->from($msg['ToUserName'])->to($msg['FromUserName'])->send();
             }
-        } elseif ('event' == $msg['MsgType']) {
+
+
+        } elseif ($msg['MsgType'] == 'event') {
             $curOfficialAccount = $openPlatform->officialAccount($app_id, cache()->get($app_id));
-            $curOfficialAccount->customer_service->message($msg['Event'].'from_callback')
+            $curOfficialAccount->customer_service->message($msg['Event'] . 'from_callback')
                 ->to($msg['FromUserName'])->from($msg['ToUserName'])->send();
             die;
         }

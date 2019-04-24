@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -183,7 +183,9 @@ class PlatformService
      */
     public function getAccount($appId, $type = 'miniProgram')
     {
-        if ('wx570bc396a51b8ff8' == $appId) {
+
+        if($appId=='wx570bc396a51b8ff8'){
+
             return $this->server;
         }
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -55,7 +55,9 @@ class NotifyController extends Controller
      */
     public function notifyAccount($appid)
     {
-        if ('wx570bc396a51b8ff8' == $appid) {
+
+        if($appid=='wx570bc396a51b8ff8'){
+
             return $this->messageService->FullNetworkReleaseReceiver($appid);
         }
 

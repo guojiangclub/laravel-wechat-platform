@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ibrand/laravel-wechat-platform.
+ * This file is part of ibrand/wechat-platform.
  *
  * (c) iBrand <https://www.ibrand.cc>
  *
@@ -19,13 +19,16 @@ class Theme extends Model
 
     protected $guarded = ['id'];
 
-    public function items()
-    {
-        return $this->hasMany(ThemeItems::class, 'theme_id')->where('type', 1);
+    public function items(){
+
+        return $this->hasMany(ThemeItems::class,'theme_id')->where('type',1);
     }
 
-    public function bars()
-    {
-        return $this->hasMany(ThemeItems::class, 'theme_id')->where('type', 2);
+    public function bars(){
+
+        return $this->hasMany(ThemeItems::class,'theme_id')->where('type',2);
     }
+
 }
+
+
