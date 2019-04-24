@@ -41,10 +41,10 @@ class OAuthService
     {
         // 保存Token
         $token = $this->repository->ensureToken($appid, $user->id);
-        $token->access_token = $user->token->access_token;
-        $token->refresh_token = $user->token->refresh_token;
+        $token->access_token = $user->token;
+        /*$token->refresh_token = $user->token->refresh_token;
         $token->scope = $user->token->scope;
-        $token->expires_in = $user->token->expires_in;
+        $token->expires_in = $user->token->expires_in;*/
         $token->save();
 
         return $token;
