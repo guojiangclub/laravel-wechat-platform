@@ -76,7 +76,11 @@
                         @foreach ($lists as $item)
                             <tr>
                                 <td>{{$item->appid}}</td>
-                                <td>{{md5($item->appid)}}</td>
+
+                                @if($name=='小程序')
+                                    <td>{{md5($item->appid)}}</td>
+                                @endif
+
                                 <td>{{$item->client_id}}</td>
                                 <td>{{$item->nick_name}}</td>
                                 <td>{{$item->user_name}}</td>

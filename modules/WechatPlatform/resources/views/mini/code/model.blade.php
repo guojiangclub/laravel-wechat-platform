@@ -260,6 +260,7 @@ vertical-align: middle!important;">
     $('#select_bars_box').change(function (e) {
         var val = $(this).val();
         if (val != 0) {
+            $('#bar').empty();
             $('.bar').show();
             var param = bars[val]['param'].replace(/&quot;/g, '"');
             bars[val]['param'] = param

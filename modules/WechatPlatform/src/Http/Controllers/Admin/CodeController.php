@@ -18,6 +18,7 @@ use iBrand\Wechat\Platform\Http\Controllers\Controller;
 use iBrand\Wechat\Platform\Repositories\CodePublishRepository;
 use iBrand\Wechat\Platform\Services\PlatformService;
 use iBrand\Wechat\Platform\Models\CodePublish;
+use iBrand\Wechat\Platform\Services\CodeService;
 
 /**
  * 小程序代码管理
@@ -32,10 +33,14 @@ class CodeController extends Controller
     public function __construct(
         PlatformService $platformService,
 
-        CodePublishRepository $codePublishRepository
+        CodePublishRepository $codePublishRepository,
+
+        CodeService $codeService
     )
     {
         $this->platform = $platformService;
+
+        $this->codeService = $codeService;
 
         $this->codePublishRepository = $codePublishRepository;
     }
@@ -248,9 +253,16 @@ class CodeController extends Controller
      */
     public function log()
     {
+
         $appid = request('appid');
 
         $limit = request('limit') ? request('limit') : 20;
+
+        if(!empty($appid)){
+
+             $this->codeService->getAppAuditStatus($appid);
+
+        }
 
         $lists = $this->codePublishRepository->getListsByAppId($appid, $auditid = null, $limit);
 

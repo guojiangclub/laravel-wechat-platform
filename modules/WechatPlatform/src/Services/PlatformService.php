@@ -46,7 +46,10 @@ class PlatformService
         AuthorizerRepository $authorizerRepository
     ) {
         $this->authorizerRepository = $authorizerRepository;
-        $this->server = Factory::openPlatform(config('wechat-platform.open_platform.default'));
+        $app= Factory::openPlatform(config('wechat-platform.open_platform.default'));
+        $app['request']=request();
+        $this->server = $app;
+
     }
 
     /**
