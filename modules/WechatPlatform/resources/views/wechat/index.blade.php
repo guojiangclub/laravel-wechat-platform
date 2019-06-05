@@ -99,6 +99,12 @@
                                                class="fa fa-user"
                                                title="体验微信"></i></a>
 
+                                        <a class="btn btn-xs btn-info" target="_blank"
+                                           href="{{route('admin.mini.plugin.lists',['appid'=>$item->appid])}}">
+                                            <i data-toggle="tooltip" data-placement="top"
+                                               class="fa fa-cogs"
+                                               title="插件管理"></i></a>
+
                                         {{--<a class="btn btn-xs btn-info"--}}
                                         {{--href="{{route('admin.mini.send.index',['appid'=>$item->appid,'type'=>'dev'])}}" target="_blank" >--}}
                                         {{--<span data-toggle="tooltip" data-placement="top"--}}

@@ -49,6 +49,15 @@ $router->group(['prefix' => 'wechat_platform'], function ($router) {
             $router->post('/{id}/delete', 'TesterController@delete')->name('admin.mini.tester.delete');
         });
 
+        //小程序插件管理
+        $router->group(['prefix' => 'plugin'], function ($router) {
+            $router->get('/', 'PluginController@getLists')->name('admin.mini.plugin.lists');
+
+            $router->post('/store', 'PluginController@store')->name('admin.mini.plugin.store');
+
+            $router->post('/{id}/delete', 'PluginController@delete')->name('admin.mini.plugin.delete');
+        });
+
         //修改服务器地址
         $router->group(['prefix' => 'domain'], function ($router) {
             $router->get('/', 'DomainController@index')->name('admin.mini.domain.index');

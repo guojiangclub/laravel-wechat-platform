@@ -289,6 +289,16 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
             $router->post('/unbind', 'TesterController@unbind');
         });
 
+        //插件管理
+        $router->group(['prefix' => 'plugin'], function ($router) {
+            //查询已添加的插件列表
+            $router->get('/list', 'PluginController@list');
+            //插件的申请接口
+            $router->post('/apply', 'PluginController@apply');
+            //删除已添加的插件
+            $router->post('/unbind', 'PluginController@unbind');
+        });
+
         //小程序代码管理
         $router->group(['prefix' => 'code'], function ($router) {
             //为授权的小程序帐号上传小程序代码
