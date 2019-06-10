@@ -24,6 +24,10 @@ $router->group(['prefix' => 'wechat_platform'], function ($router) {
     $router->group(['prefix' => 'wechat'], function ($router) {
         $router->get('/', 'WechatController@index')->name('admin.wechat.list');
 
+        $router->get('/img', 'WechatController@img')->name('admin.wechat.img');
+
+        $router->get('/show/img', 'WechatController@showImg')->name('admin.wechat.showImg');
+
         $router->post('/{id}/delete', 'WechatController@destroy')->name('admin.wechat.delete');
     });
 

@@ -40,14 +40,15 @@ class PlatformService
      * ComponentService constructor.
      *
      * @param AuthorizerRepository $repository
-     * @param Guard                $server
+     * @param Guard $server
      */
     public function __construct(
         AuthorizerRepository $authorizerRepository
-    ) {
+    )
+    {
         $this->authorizerRepository = $authorizerRepository;
-        $app= Factory::openPlatform(config('wechat-platform.open_platform.default'));
-        $app['request']=request();
+        $app = Factory::openPlatform(config('wechat-platform.open_platform.default'));
+        $app['request'] = request();
         $this->server = $app;
 
     }
@@ -63,7 +64,10 @@ class PlatformService
      */
     public function authEventProcess()
     {
-        $server = $this->server->server;
+
+        $server=$this->platform();
+
+        $server = $server->server;
 
         // 处理授权取消事件
         $server->push(function ($message) {
@@ -71,6 +75,10 @@ class PlatformService
                 Authorizer::where(['appid' => $message['AuthorizerAppid']])->update(['client_id' => 0]);
             }
         }, Guard::EVENT_UNAUTHORIZED);
+
+//        $server->push(function ($message) {
+//            \Log::info($message);
+//        }, Guard::EVENT_COMPONENT_VERIFY_TICKET);
 
         return $server->serve();
     }
@@ -87,7 +95,9 @@ class PlatformService
      */
     public function authRedirectUrl($callback, $authCode = null)
     {
-        return $this->server->getPreAuthorizationUrl($callback, $authCode);
+        $server=$this->platform();
+
+        return $server->getPreAuthorizationUrl($callback, $authCode);
     }
 
     /**
@@ -99,15 +109,17 @@ class PlatformService
      */
     public function saveAuthorization($auth_code)
     {
+        $server=$this->platform();
+
         // 换取公众号的接口调用凭据
-        $result = $this->server->handleAuthorize($auth_code);
+        $result = $server->handleAuthorize($auth_code);
         if (!isset($result['authorization_info'])) {
             return;
         }
         $info = $result['authorization_info'];
 
         // 获取公众号基本信息
-        $authorzer_info = $this->server->getAuthorizer($info['authorizer_appid']);
+        $authorzer_info = $server->getAuthorizer($info['authorizer_appid']);
 
         \Log::info($authorzer_info);
 
@@ -187,9 +199,11 @@ class PlatformService
     public function getAccount($appId, $type = 'miniProgram')
     {
 
-        if($appId=='wx570bc396a51b8ff8'){
+        $server=$this->platform();
 
-            return $this->server;
+        if ($appId == 'wx570bc396a51b8ff8') {
+
+            return $server;
         }
 
         //获取token
@@ -200,9 +214,20 @@ class PlatformService
         }
 
         if ('miniProgram' == $type) {
-            return $this->server->miniProgram($appId, $authorizer->refresh_token);
+            return $server->miniProgram($appId, $authorizer->refresh_token);
         }
 
-        return $this->server->officialAccount($appId, $authorizer->refresh_token);
+        return $server->officialAccount($appId, $authorizer->refresh_token);
     }
+
+
+    protected function platform()
+    {
+        $app = Factory::openPlatform(config('wechat-platform.open_platform.default'));
+
+        $app['request'] = request();
+
+        return $app;
+    }
+
 }

@@ -88,4 +88,19 @@ class WechatController extends Controller
 
         return $this->api([], false, 400, '删除失败');
     }
+
+    public function img(){
+
+        header('content_type:image/jpeg');
+
+        echo file_get_contents(request('url'));
+
+    }
+
+    public function showImg(){
+
+        $url=request('url');
+
+        return view('wechat-platform::wechat.img',compact('url'));
+    }
 }

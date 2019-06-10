@@ -86,7 +86,7 @@
                                 <td>{{$item->user_name}}</td>
                                 <td>{{$item->principal_name}}</td>
                                 <td>
-                                    <a href="{{$item->qrcode_url}}">查看</a>
+                                    <a href="{{route('admin.wechat.showImg',['url'=>$item->qrcode_url])}}" target="_blank">查看</a>
                                 </td>
 
                                 <td>{{$item->created_at}}</td>
@@ -252,6 +252,10 @@
 
 
 </script>
+
+
+
+
 
 
 
