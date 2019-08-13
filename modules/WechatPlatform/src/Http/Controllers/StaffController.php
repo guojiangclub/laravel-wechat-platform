@@ -11,6 +11,9 @@
 
 namespace iBrand\Wechat\Platform\Http\Controllers;
 
+use EasyWeChat\Kernel\Messages\Image;
+use EasyWeChat\Kernel\Messages\Text;
+use EasyWeChat\Kernel\Messages\Video;
 use iBrand\Wechat\Platform\Services\MessageService;
 use iBrand\Wechat\Platform\Services\PlatformService;
 
@@ -220,6 +223,49 @@ class StaffController extends Controller
         $server = $this->platform->authorizeAPI($appid);
 
         $message = $data['message'];
+
+        //调用接口
+        if (isset($data['kf_account'])) {
+            $result = $server->customer_service->message($message)->from($data['kf_account'])->to($data['openid'])->send();
+        }
+
+        $result = $server->customer_service->message($message)->to($data['openid'])->send();
+
+        //返回JSON
+        return $result;
+    }
+
+    public function sendMessageTo()
+    {
+        // 参数
+        $appid = request('appid');
+
+        $data = request()->json()->all();
+
+        // 授权
+        $server = $this->platform->authorizeAPI($appid);
+
+        $data = $data['message'];
+
+        /*文本*/
+        if (is_string($data) || is_numeric($data)) {
+            $message = new Text((string) $data);
+        }else{
+            switch ($data['type']){
+                case 'image':
+                    $message=new Image($data['media_id']);
+                    break;
+                case 'video':
+                    $message=new Video($data['media_id'], [
+                        'title' => $data['title'],
+                        'description' => $data['description']
+                    ]);
+                    break;
+                default:
+                    $message = new Text('暂不支持的消息');
+                //TODO::还可以完善图文消息，文章消息，素材消息
+            }
+        }
 
         //调用接口
         if (isset($data['kf_account'])) {
