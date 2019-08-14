@@ -245,24 +245,24 @@ class StaffController extends Controller
         // 授权
         $server = $this->platform->authorizeAPI($appid);
 
-        $data = $data['message'];
+        $msgData = $data['message'];
 
         /*文本*/
-        if (is_string($data) || is_numeric($data)) {
-            $message = new Text((string) $data);
+        if (is_string($msgData) || is_numeric($msgData)) {
+            $message = (string) $msgData;
         }else{
             switch ($data['type']){
                 case 'image':
-                    $message=new Image($data['media_id']);
+                    $message=new Image($msgData['media_id']);
                     break;
                 case 'video':
-                    $message=new Video($data['media_id'], [
-                        'title' => $data['title'],
-                        'description' => $data['description']
+                    $message=new Video($msgData['media_id'], [
+                        'title' => $msgData['title'],
+                        'description' => $msgData['description']
                     ]);
                     break;
                 default:
-                    $message = new Text('暂不支持的消息');
+                    $message = '暂不支持的消息';
                 //TODO::还可以完善图文消息，文章消息，素材消息
             }
         }
