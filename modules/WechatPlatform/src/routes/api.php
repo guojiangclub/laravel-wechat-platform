@@ -156,6 +156,8 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->post('/setAvatar', 'StaffController@setAvatar');
         //主动发送消息给用户
         $router->post('/send/message', 'StaffController@sendMessage');
+        //完善版主动发送消息给用户
+        $router->post('/send/sendMessageTo', 'StaffController@sendMessageTo');
         //邀请微信用户加入客服
         $router->post('/invite', 'StaffController@invite');
         //创建会话
