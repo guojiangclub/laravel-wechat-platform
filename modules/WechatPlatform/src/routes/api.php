@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of ibrand/wechat-platform.
  *
@@ -8,24 +7,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 $router->get('/', function () {
     dd(request()->header('appid'));
 });
-
-
 // 平台授权事件接收URL
 $router->any('/notify', 'NotifyController@notifyPlatform');
 // 公众号消息与事件接收URL
 Route::any('/notify/{appid}', 'NotifyController@notifyAccount');
-
 $router->group(['middleware' => 'client'], function () use ($router) {
     // 获取授权公众号或小程序列表
     $router->get('authorizers', 'AuthorizerController@index');
     //取消授权删除授权
     $router->any('del', 'AuthorizerController@update');
 });
-
 // --------------------------------- 获取OAuth用户信息-----------------------------------//
 $router->group(['middleware' => ['client', 'parameter']], function () use ($router) {
     $router->group(['prefix' => 'oauth'], function ($router) {
@@ -49,10 +43,8 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->get('/blacklist', 'FansController@blacklist');
     });
 });
-
 $router->group(['middleware' => ['client', 'parameter']], function () use ($router) {
     // --------------------------------用户组（标签）----------------------------//
-
     $router->group(['prefix' => 'fans/group'], function ($router) {
         //获取标签组列表
         $router->get('/lists', 'FansGroupController@lists');
@@ -71,9 +63,7 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //获取标签下用户列表
         $router->post('/userList', 'FansGroupController@UserList');
     });
-
     // --------------------------------菜单----------------------------//
-
     $router->group(['prefix' => 'menu'], function ($router) {
         //查询已设置菜单
         $router->get('/lists', 'MenuController@getAll');
@@ -86,9 +76,7 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //测试个性化菜单
         $router->post('/match', 'MenuController@match');
     });
-
     // --------------------------------模板消息----------------------------//
-
     $router->group(['prefix' => 'notice'], function ($router) {
         //获取支持的行业列表
         $router->get('/getIndustry', 'NoticeController@getIndustry');
@@ -103,9 +91,7 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //删除模板
         $router->post('/delete', 'NoticeController@delete');
     });
-
     // --------------------------------二维码--------------------------------//
-
     $router->group(['prefix' => 'qrcode'], function ($router) {
         //创建临时二维码
         $router->post('/temporary', 'QRCodeController@storeTemporary');
@@ -114,31 +100,22 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //获取二维码网址
         $router->post('/url', 'QRCodeController@getUrl');
     });
-
     // --------------------------------短网址服务----------------------------//
-
     $router->group(['prefix' => 'shorten'], function ($router) {
         //创建临时二维码
         $router->post('/get', 'ShortenController@shorten');
     });
-
     // --------------------------------群发----------------------------//
-
     $router->group(['prefix' => 'broadcast'], function ($router) {
         //群发发送消息
         $router->post('/send', 'BroadcastController@send');
     });
-
     // ---------------------------获取jsapi_ticket----------------------------//
-
     $router->group(['prefix' => 'js'], function ($router) {
         $router->get('/ticket', 'JsController@ticket');
-
         $router->get('/config', 'JsController@config');
     });
-
     // ---------------------------客服----------------------------//
-
     $router->group(['prefix' => 'staff'], function ($router) {
         //获取所有客服
         $router->get('/lists', 'StaffController@getLists');
@@ -156,6 +133,8 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         $router->post('/setAvatar', 'StaffController@setAvatar');
         //主动发送消息给用户
         $router->post('/send/message', 'StaffController@sendMessage');
+        //完善版主动发送消息给用户
+        $router->post('/send/sendMessageTo', 'StaffController@sendMessageTo');
         //邀请微信用户加入客服
         $router->post('/invite', 'StaffController@invite');
         //创建会话
@@ -167,11 +146,8 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //获取未接入会话列表
         $router->post('/session/waiting/list', 'StaffController@customerSsessionWaiting');
     });
-
     // ---------------------------素材----------------------------//
-
     $router->post('/media/upload/image', 'MediasController@RemoteImage');
-
     $router->group(['prefix' => 'medias'], function ($router) {
         //上传图片素材
         $router->post('/remote/image', 'MediasController@RemoteImage');
@@ -196,7 +172,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //获取素材计数
         $router->get('/stats', 'MediasController@stats');
     });
-
     // ---------------------------优惠券和除会员卡外其他卡券----------------------------//
     $router->group(['prefix' => 'coupon'], function ($router) {
         //创建卡券
@@ -226,7 +201,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //核销Code
         $router->post('/consumeCode', 'CouponController@consumeCode');
     });
-
     // ---------------------------会员卡----------------------------//
     $router->group(['prefix' => 'card'], function ($router) {
         //上传会员卡背景图
@@ -262,12 +236,10 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
         //checkCode
         $router->post('/getCode', 'CardController@getCode');
     });
-
     // ---------------------------数据统计与分析----------------------------//
     $router->group(['prefix' => 'data'], function ($router) {
         $router->get('/{str}', 'DataController@DataCube');
     });
-
     // ----------------------------小程序相关----------------------//
     $router->group(['middleware' => ['client', 'parameter'], 'prefix' => 'mini', 'namespace' => 'MiniProgram'], function () use ($router) {
 //        //小程序修改服务器地址
@@ -278,7 +250,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
 //            $router->post('/setWebviewDomain', 'DomainController@setWebviewDomain');
 //
 //        });
-
         //体验成员管理
         $router->group(['prefix' => 'tester'], function ($router) {
             //获取体验者列表
@@ -288,7 +259,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
             //解除绑定小程序的体验者
             $router->post('/unbind', 'TesterController@unbind');
         });
-
         //小程序代码管理
         $router->group(['prefix' => 'code'], function ($router) {
             //为授权的小程序帐号上传小程序代码
@@ -320,7 +290,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
             //查询当前分阶段发布详情
             $router->get('/getGrayRelease', 'CodeController@getGrayRelease');
         });
-
         //小程序模板消息设置
         $router->group(['prefix' => 'template_message'], function ($router) {
             //获取小程序模板库标题列表
@@ -336,18 +305,15 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
             //发送小程序模板消息
             $router->post('/send', 'TemplateMessageController@send');
         });
-
         //小程序基础接口
         $router->group(['prefix' => 'base'], function ($router) {
             //根据jsCode获取用户session信息
             $router->post('/session', 'BaseController@session');
         });
-
         //数据统计与分析
         $router->group(['prefix' => 'data'], function ($router) {
             $router->get('/{str}', 'BaseController@DataCube');
         });
-
         //获取小程序码
         $router->group(['prefix' => 'app_code'], function ($router) {
             //永久有效适用于需要的码数量较少的业务场景
@@ -357,7 +323,6 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
             //获取小程序二维码
             $router->post('/getQrCode', 'AppCodeController@getQrCode');
         });
-
         //客服
         $router->group(['prefix' => 'staff'], function ($router) {
             //获取所有客服
@@ -387,11 +352,9 @@ $router->group(['middleware' => ['client', 'parameter']], function () use ($rout
             //获取未接入会话列表
             $router->post('/session/waiting/list', 'StaffController@customerSsessionWaiting');
         });
-
         //微信小程序消息解密
         $router->group(['prefix' => 'decrypted'], function ($router) {
             $router->post('/', 'BaseController@decryptedData');
         });
-
     });
 });
