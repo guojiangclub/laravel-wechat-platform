@@ -97,4 +97,23 @@ class DomainService
 
         return $data;
     }
+
+     /**
+     * @param $appid
+     * @param array $data
+     * @param string $action
+     * @return array|\EasyWeChat\Kernel\Support\Collection|\EasyWeChat\OpenPlatform\Application|\EasyWeChat\OpenPlatform\Authorizer\MiniProgram\Application|\EasyWeChat\OpenPlatform\Authorizer\OfficialAccount\Application|null|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+      public function setWebviewDomain($appid, $data = [],$action='add'){
+
+        $server = $this->platformService->getAccount($appid);
+
+        if (null == $server) {
+            return $server;
+        }
+
+        return $server->domain->setWebviewDomain($data,$action);
+
+    }
 }

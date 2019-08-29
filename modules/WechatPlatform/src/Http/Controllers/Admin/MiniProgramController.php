@@ -118,6 +118,13 @@ class MiniProgramController extends Controller
             }
         }
 
+        //设置小程序业务域名
+        $webviewDomainUrl=["https://admin.viperky.com"];
+
+        $domain_res=$this->domainService->setWebviewDomain($appid,$webviewDomainUrl);
+        \Log::info('设置小程序业务域名');
+        \Log::info($domain_res);
+
         //获取系统版本
         $type = request('type');
 
