@@ -40,4 +40,4 @@ iBrand Wechat Platform 是一个免费开源的微信第三方平台，基于 La
 
 ## 讨论交流
 
-![iBrand联系我们](https://iyoyo.oss-cn-hangzhou.aliyuncs.com/post/%E4%BA%8C%E7%BB%B4%E7%A0%81.jpg)
+![iBrand联系我们](https://iyoyo.oss-cn-hangzhou.aliyuncs.com/post/qrcodenew.jpg)
