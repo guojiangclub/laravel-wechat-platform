@@ -41,3 +41,29 @@ iBrand Wechat Platform 是一个免费开源的微信第三方平台，基于 La
 ## 讨论交流
 
 ![iBrand联系我们](https://iyoyo.oss-cn-hangzhou.aliyuncs.com/post/qrcodenew.jpg)
+
+## 果酱云社区
+
+<p align="center">
+  <a href="https://guojiang.club/" target="_blank">
+    <img src="https://cdn.guojiang.club/image/2022/02/16/wu_1fs0jbco2182g280l1vagm7be6.png" alt="点击跳转"/>
+  </a>
+</p>
+
+
+
+- 全网真正免费的IT课程平台
+
+- 专注于综合IT技术的在线课程，致力于打造优质、高效的IT在线教育平台
+
+- 课程方向包含Python、Java、前端、大数据、数据分析、人工智能等热门IT课程
+
+- 300+免费课程任你选择
+
+
+
+<p align="center">
+  <a href="https://guojiang.club/" target="_blank">
+    <img src="https://cdn.guojiang.club/image/2022/02/16/wu_1fs0l82ae1pq11e431j6n17js1vq76.png" alt="点击跳转"/>
+  </a>
+</p>
